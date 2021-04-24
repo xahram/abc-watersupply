@@ -1,0 +1,9 @@
+###
+POST http://localhost:7000/signup/superUser/
+Content-Type: application/json
+
+{
+    "name": "Super User",
+    "age": 22,
+    "role" : "SUPER_USER"
+}
