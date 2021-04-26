@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const roleValidator = require("../dependencies/helpers/schemavalidation.helpers/user.validator");
+const roleValidator = require("../dependencies/helpers/customDbValidaiton.helpers/user.validator");
 
 const userSchema = mongoose.Schema({
   name: {

@@ -14,6 +14,7 @@ require("../api/dependencies/db/db.connection");
 // Importing Routes
 const userRouter = require("../api/routers/user.router");
 const utilityRouter = require("../api/routers/utility.router");
+const paymentRouter = require("../api/routers/payment.router");
 
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(morgan("dev"));
 // Routes For handling incoming User requests
 app.use("/auth", userRouter);
 app.use("/admin", utilityRouter);
+app.use("/payments",paymentRouter);
 
 
 // Error Handlers

@@ -1,3 +1,4 @@
+#   --------------------------AUTH_USER---------------------------------
 ###
 POST http://localhost:7000/auth/signup
 Content-Type: application/json
@@ -23,6 +24,8 @@ Content-Type: application/json
 GET http://localhost:7000/auth/search/6084feee6224e53bdc453c76
 Content-Type: application/json
 
+
+#   -----------------------------UTILTY---------------------------------
 ###
 POST http://localhost:7000/admin/utility
 Content-Type: application/json
@@ -37,3 +40,32 @@ Content-Type: application/json
 ###
 GET  http://localhost:7000/admin/utility
 Content-Type: application/json
+
+
+#   ---------------------------PAYMENT---------------------------------
+###
+POST http://localhost:7000/payments/createPayment
+Content-Type: application/json
+
+{
+    "userId":"6084feee6224e53bdc453c76",
+    "paid": 1100,
+    "dueAmount":0
+
+}
+
+###
+POST http://localhost:7000/payments/getPayments
+Content-Type: application/json
+
+{
+    "userId":"6084feee6224e53bdc453c76"
+}
+
+###
+POST http://localhost:7000/payments/getSinglePaymentRecord
+Content-Type: application/json
+
+{
+    "paymentId":"60863fa0d98ba34190098d6d"
+}

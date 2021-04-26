@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bottleTypeValidator = require("../dependencies/helpers/schemavalidation.helpers/delivery.validator");
+const bottleTypeValidator = require("../dependencies/helpers/customDbValidaiton.helpers/delivery.validator");
 const deliverySchema = mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   bottleSize: {
