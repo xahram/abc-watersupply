@@ -1,9 +1,39 @@
 ###
-POST http://localhost:7000/signup/superUser/
+POST http://localhost:7000/auth/signup
 Content-Type: application/json
 
 {
-    "name": "Super User",
+    "email":"tester@gmail.com",
+    "name": "Tester",
     "age": 22,
-    "role" : "SUPER_USER"
+    "password" : "tester1234",
+    "role" : "ADMIN"
 }
+
+###
+POST http://localhost:7000/auth/login
+Content-Type: application/json
+
+{
+    "email":"tester@gmail.com",
+    "password" : "tester1234"
+  
+}
+###
+GET http://localhost:7000/auth/search/6084feee6224e53bdc453c76
+Content-Type: application/json
+
+###
+POST http://localhost:7000/admin/utility
+Content-Type: application/json
+
+{
+   "roles": ["SUPER_USER","ADMIN","DELIVERY_BOY","CUSTOMER"],
+    "ratelist": [{"size":"1000ml", "price": 70},{"size":"500ml", "price": 40}],
+   "subscriptions": [{"name":"WEEKLY", "price":600,"days":7},{"name":"BIWEEKLY", "price":1000,"days":15},{"name":"MONTHLY", "price":4000,"days":30}] 
+}
+
+
+###
+GET  http://localhost:7000/admin/utility
+Content-Type: application/json

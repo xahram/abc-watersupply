@@ -13,6 +13,8 @@ require("../api/dependencies/db/db.connection");
 
 // Importing Routes
 const userRouter = require("../api/routers/user.router");
+const utilityRouter = require("../api/routers/utility.router");
+
 
 const app = express();
 
@@ -24,7 +26,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(morgan("dev"));
 
 // Routes For handling incoming User requests
-app.use("/signup", userRouter);
+app.use("/auth", userRouter);
+app.use("/admin", utilityRouter);
+
 
 // Error Handlers
 app.use((req, res, next) => {
