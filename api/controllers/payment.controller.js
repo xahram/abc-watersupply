@@ -2,7 +2,9 @@ const Payment = require("../models/payment.model");
 const User = require("../models/user.model");
 const moment = require("moment");
 const {
-  paymentSchemaValidator,
+  createPaymentSchemaValidator,
+  getPaymentRecordOfUserSchemaValidator,
+  singlePaymentRecordValidatorSchema
 } = require("../dependencies/helpers/validation.schema/payment.validation");
 const {
   CREATED,
@@ -17,10 +19,10 @@ const createPayment = async (req, res, next) => {
   const paymentTime = moment().format();
 
   try {
-    const values = await paymentSchemaValidator.validateAsync({
+    const values = await createPaymentSchemaValidator.validateAsync({
       userId,
       paid,
-      dueAmount,
+      dueAmount
     });
 
     // Check If user with that Id Exists Or not
@@ -39,10 +41,13 @@ const createPayment = async (req, res, next) => {
     );
 
     // Check If the previous Payment Rcord exists to calculate total Payment
-    let totalPayment = previousPayment ? previousPayment.totalAmount : 0;
+    let totalPayment = previousPayment ? previousPayment.totalAmountPaid : 0;
+    let totalPaymentDue = previousPayment ? previousPayment.totalAmountDue : 0;
     const payment = new Payment({
       ...values,
-      totalAmount: totalPayment + (paid - dueAmount),
+      // totalAmount: totalPayment + (paid - dueAmount),
+      totalAmountPaid: totalPayment + paid,
+      totalAmountDue: totalPaymentDue + dueAmount,
       paymentTime,
     });
 
@@ -56,8 +61,8 @@ const createPayment = async (req, res, next) => {
 };
 
 const getPayments = async (req, res, next) => {
-  const { userId } = req.body;
   try {
+    const { userId }= await getPaymentRecordOfUserSchemaValidator.validateAsync(req.body)
     const payments = await Payment.find({ userId }, { __v: 0 }, { sort: { paymentTime: -1 } });
     if (!payments.length)
       return res
@@ -69,13 +74,13 @@ const getPayments = async (req, res, next) => {
   }
 };
 
-const getLatestPaymentRecord = async (req, res, next) => {
-  const { paymentId } = req.body;
+const getSinglePaymentRecord= async (req, res, next) => {
   try {
+    const { paymentId }= await singlePaymentRecordValidatorSchema.validateAsync(req.body)
+
     const payment = await Payment.findOne(
       { _id: paymentId },
-      { __v: 0 },
-      { sort: { paymentTime: -1 } }
+      { __v: 0 }
     );
     if (!payment)
       return res
@@ -90,5 +95,5 @@ const getLatestPaymentRecord = async (req, res, next) => {
 module.exports = {
   createPayment,
   getPayments,
-  getLatestPaymentRecord,
+  getSinglePaymentRecord
 };

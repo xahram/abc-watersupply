@@ -13,7 +13,8 @@ mongoose
     logSuccess("Connection Established To ABC-Supply Cluster");
   })
   .catch((error) => {
-      logError(error.message);
+    logError(error.message);
+    process.exit(1);
   });
 
 
@@ -26,12 +27,16 @@ mongoose.connection.on("connected", async () => {
 // Listening to Node Error Event if mongoose connection fails
 mongoose.connection.on("error", (error) => {
   logError(error.message);
+    // Exit process with failure Code:1. "1" is failure code, while "0" is normal exit code
+      process.exit(1);
 });
 
 
 // Close connection to the Database on node process exit
 process.on("SIGINT", async () => {
   await mongoose.connection.close();
+   // Exit process with failure Code:1. "1" is failure code, while "0" is normal exit code
+   process.exit(0);
 });
 
 //https://nodejs.dev/learn/how-to-exit-from-a-nodejs-program

@@ -24,11 +24,16 @@ const getBottleSizeArray = async (bottle) => {
   }
 };
 
-const deliverySchemaValidator = Joi.object({
-  userId: Joi.string().required(),
+const getUserDeliveriesSchemaValidator = Joi.object({
+  userId: Joi.string().required()
+});
+
+const getDeliveryRecordByIdSchemaValidator = Joi.object({
+  deliveryId: Joi.string().required()
 });
 
 module.exports = {
-  deliverySchemaValidator,
+  getUserDeliveriesSchemaValidator,
   getBottleSizeArray,
+  getDeliveryRecordByIdSchemaValidator
 };

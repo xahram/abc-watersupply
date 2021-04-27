@@ -13,18 +13,39 @@ const {
   NOT_FOUND,
   CONFLICT,
 } = require("../dependencies/config").RESPONSE_STATUS_CODES;
+const {
+  userLoginSchemaValidator,
+  userSignUpSchemaValidator,
+} = require("../dependencies/helpers/validation.schema/user.validation");
 
 const signup = async (req, res, next) => {
-  const { email, name, age, role, password } = req.body;
+  // const { email, name, age, role, password } = req.body;
+
   try {
+    // Validate The incoming Requests Fields
+    const {
+      email,
+      name,
+      age,
+      role,
+      password,
+    } = await userSignUpSchemaValidator.validateAsync(req.body);
+
     // Check If Email Already Exists
     const verifyEmailExists = await User.findOne({ email });
     if (verifyEmailExists)
-      return res.status(CONFLICT).send({ message: "Email Already In User" });
+      return res.status(CONFLICT).send({ message: "Email Already In Use" });
 
-    // Generate Hash Password
-    const hashPassword = await generatePassword(password, 10);
-    const user = new User({ email, name, age, role, password: hashPassword });
+    let user;
+    // Check if the password field exists or not in case of Customers or Delivery Boys
+    if (password) {
+      // Generate Hash Password
+      const hashPassword = await generatePassword(password, 10);
+      user = new User({ email, name, age, role, password: hashPassword });
+    } else {
+      user = new User({ email, name, age, role });
+    }
+
     await user.save();
     const token = await generateAccessToken({
       id: user._id,
@@ -38,8 +59,9 @@ const signup = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-  const { email, password } = req.body;
+  // const { email, password } = req.body;
   try {
+    const { email, password } = await userLoginSchemaValidator.validateAsync(req.body);
     const user = await User.findOne({ email });
     if (!user)
       return res
@@ -84,7 +106,8 @@ const searchUser = async (req, res, next) => {
 const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find().select("-__v -password");
-    if (!users.length)  return res.status(NOT_FOUND).send({ message: "No User Exists" });
+    if (!users.length)
+      return res.status(NOT_FOUND).send({ message: "No User Exists" });
     res.status(SUCCESS).send({ users });
   } catch (error) {
     res.status(NOT_FOUND).send({ errorMessage: error.message });
@@ -94,5 +117,5 @@ module.exports = {
   signup,
   searchUser,
   login,
-  getAllUsers
+  getAllUsers,
 };

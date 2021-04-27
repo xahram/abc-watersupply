@@ -1,6 +1,9 @@
 const Sale = require("../models/sales.model");
 const moment = require("moment");
-
+const {
+  createSaleSchemaValidator,
+  getSingleSaleRecordSchemaValidator
+} = require("../dependencies/helpers/validation.schema/sale.validation");
 const {
   CREATED,
   BAD_REQUEST,
@@ -10,10 +13,12 @@ const {
 } = require("../dependencies/config").RESPONSE_STATUS_CODES;
 
 const createSale = async (req, res, next) => {
-  const { paid } = req.body;
-  const paymentTime = moment().format();
+  // const { paid } = req.body;
 
   try {
+    const { paid } = await createSaleSchemaValidator.validateAsync(req.body);
+    const paymentTime = moment().format();
+
     // Find the Latest Previous PaymentTime Of the user to
     // calculate Total Amount paid So far
     const previousSale = await Sale.findOne(
@@ -54,14 +59,11 @@ const getSales = async (req, res, next) => {
   }
 };
 
-const getLatestSale = async (req, res, next) => {
-  const { saleId } = req.params;
+const getSingleSaleRecord = async (req, res, next) => {
+  // const { saleId } = req.params;
   try {
-    const sale = await Sale.findOne(
-      { _id: saleId },
-      { __v: 0 },
-      { sort: { paymentTime: -1 } }
-    );
+    const { saleId } = await getSingleSaleRecordSchemaValidator.validateAsync(req.params);
+    const sale = await Sale.findOne({ _id: saleId }, { __v: 0 });
     if (!sale)
       return res
         .status(NOT_FOUND)
@@ -74,6 +76,6 @@ const getLatestSale = async (req, res, next) => {
 
 module.exports = {
   createSale,
-  getLatestSale,
+  getSingleSaleRecord,
   getSales,
 };

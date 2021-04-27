@@ -9,6 +9,8 @@ const {
   UNAUTHORIZED,
   FORBIDDEN,
   SERVER_ERROR,
+  BAD_REQUEST,
+  NOT_FOUND
 } = require(`../dependencies/config`).RESPONSE_STATUS_CODES;
 const { getUserRolesFromDatabase } = require("../dependencies/config");
 
@@ -16,11 +18,11 @@ const accessGranter = async (req, res, next) => {
   try {
     const token = req.headers.authorization.replace("Bearer ", "");
 
-    logInfo("authneticate-request file: ", token);
+    // logInfo("authneticate-request file: ", token);
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
-    logInfo("Authenticate Request line 23 Decoded token: ", decoded);
+    // logInfo("Authenticate Request line 23 Decoded token: ", decoded);
 
     // Check for validity of the user Role if it is available in roles Array of our DB
     // and If it matches with the user role in the db
@@ -53,7 +55,7 @@ const accessGranter = async (req, res, next) => {
 const grantUserAccessToRole = (req, res, next) => {
   const user = req.user;
 
-  logInfo("GRANTACCESSTOROLE : ", user);
+  // logInfo("GRANTACCESSTOROLE : ", user);
   if (user.role === "SUPER_USER" || user.role === "ADMIN") {
     next();
   } else {

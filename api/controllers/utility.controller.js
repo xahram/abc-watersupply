@@ -2,13 +2,13 @@ const Utility = require("../models/utility.model");
 const {
   CREATED,
   BAD_REQUEST,
-  CONFLICT
+  CONFLICT,
+  SERVER_ERROR,
+  SUCCESS
 } = require("../dependencies/config").RESPONSE_STATUS_CODES;
 
-
-
 const utilityController = async (req, res, next) => {
-  const { roles=[], ratelist=[], subscriptions=[] } = req.body;
+  const { roles = [], ratelist = [], subscriptions = [] } = req.body;
   try {
     // Check If the Utility Model is Empty Or Not
     const [utilityObj] = await Utility.find();
@@ -24,7 +24,7 @@ const utilityController = async (req, res, next) => {
 
     // Check If the values provided in the Request Body
     // already exist in our database if so reject the request
-   
+
     const doesNotExist =
       roles?.every((role) => {
         return !utilityObj.roles.includes(role);
@@ -44,8 +44,7 @@ const utilityController = async (req, res, next) => {
         );
       });
 
-
-    // If the Request Body doesn't contain the fields present 
+    // If the Request Body doesn't contain the fields present
     // in our database then concatenate them with the existing
     // values [PAYASYOUGO,MONTHLY] -> [PAYASYOUGO,MONTHLY,WEEKLY]
     if (!doesNotExist)
@@ -70,6 +69,16 @@ const utilityController = async (req, res, next) => {
   }
 };
 
+const getAllUtilities = async (req, res, next) => {
+  try {
+    const utility = await Utility.find();
+    res.status(SUCCESS).send(utility);
+  } catch (error) {
+    return res.status(SERVER_ERROR).send({ message: `Error : ${error.message}` });
+  }
+};
+
 module.exports = {
   utilityController,
+  getAllUtilities
 };

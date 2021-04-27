@@ -1,13 +1,35 @@
 const express = require("express");
 const {
+  accessGranter,
+  grantUserAccessToRole,
+} = require("../middlewares/authenticate-request.middleware");
+const {
   createSale,
-  getLatestSale,
-  getSales
+  getSingleSaleRecord,
+  getSales,
 } = require("../controllers/sale.controller");
 const saleRouter = express.Router();
 
-saleRouter.post("/createSale", createSale);
-saleRouter.post("/getSales", getSales);
-saleRouter.get("/getLatestSale/:saleId", getLatestSale);
+// This Router is used For Recording Sales Data for Random Customers
+// that aren't subscribed to our Water Supply Company
+
+// Route for creating  Sales Record
+saleRouter.post(
+  "/createSale",
+  accessGranter,
+  grantUserAccessToRole,
+  createSale
+);
+
+//Route For getting all the sales that have happened So far
+saleRouter.post("/getSales", accessGranter, grantUserAccessToRole, getSales);
+
+//Route for getting A single sale by record
+saleRouter.get(
+  "/getSingleSaleRecord/:saleId",
+  accessGranter,
+  grantUserAccessToRole,
+  getSingleSaleRecord
+);
 
 module.exports = saleRouter;
