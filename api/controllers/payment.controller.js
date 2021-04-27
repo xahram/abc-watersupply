@@ -15,7 +15,7 @@ const {
 const createPayment = async (req, res, next) => {
   const { userId, paid, dueAmount } = req.body;
   const paymentTime = moment().format();
-  console.log(paymentTime);
+
   try {
     const values = await paymentSchemaValidator.validateAsync({
       userId,
@@ -69,7 +69,7 @@ const getPayments = async (req, res, next) => {
   }
 };
 
-const getSinglePaymentRecord = async (req, res, next) => {
+const getLatestPaymentRecord = async (req, res, next) => {
   const { paymentId } = req.body;
   try {
     const payment = await Payment.findOne(
@@ -90,5 +90,5 @@ const getSinglePaymentRecord = async (req, res, next) => {
 module.exports = {
   createPayment,
   getPayments,
-  getSinglePaymentRecord,
+  getLatestPaymentRecord,
 };

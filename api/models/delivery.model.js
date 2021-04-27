@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bottleTypeValidator = require("../dependencies/helpers/customDbValidaiton.helpers/delivery.validator");
+
 const deliverySchema = mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   bottleSize: {
@@ -10,4 +11,4 @@ const deliverySchema = mongoose.Schema({
   deliveryTime: { type: mongoose.Schema.Types.Date, required: true },
 });
 
-module.exports = mongoose.model("Payment", deliverySchema);
+module.exports = mongoose.model("Delivery", deliverySchema);

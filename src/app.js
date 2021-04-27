@@ -15,6 +15,8 @@ require("../api/dependencies/db/db.connection");
 const userRouter = require("../api/routers/user.router");
 const utilityRouter = require("../api/routers/utility.router");
 const paymentRouter = require("../api/routers/payment.router");
+const deliveryRouter = require("../api/routers/delivery.router");
+const saleRouter = require("../api/routers/sale.router");
 
 
 const app = express();
@@ -30,6 +32,8 @@ app.use(morgan("dev"));
 app.use("/auth", userRouter);
 app.use("/admin", utilityRouter);
 app.use("/payments",paymentRouter);
+app.use("/deliveries",deliveryRouter);
+app.use("/sales",saleRouter);
 
 
 // Error Handlers

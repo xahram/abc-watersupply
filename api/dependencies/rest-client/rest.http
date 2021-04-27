@@ -2,13 +2,14 @@
 ###
 POST http://localhost:7000/auth/signup
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc4YzBlMzEwZTU5MzA5ODU1NDMwMSIsImVtYWlsIjoidGVzdGVyMDJAZ21haWwuY29tIiwicm9sZSI6IlNVUEVSX1VTRVIiLCJpYXQiOjE2MTk0OTYxMzZ9.XPD5ZocPp9XuWc03RmNvthniiO3o4DFPsICWzbezuH8
 
 {
-    "email":"tester@gmail.com",
-    "name": "Tester",
+    "email":"deliveryboy3@gmail.com",
+    "name": "deliveryboy1",
     "age": 22,
-    "password" : "tester1234",
-    "role" : "ADMIN"
+    "password" : "deliveryboy1",
+    "role" : "DELIVERY_BOY"
 }
 
 ###
@@ -16,19 +17,27 @@ POST http://localhost:7000/auth/login
 Content-Type: application/json
 
 {
-    "email":"tester@gmail.com",
+    "email":"tester02@gmail.com",
     "password" : "tester1234"
   
 }
 ###
-GET http://localhost:7000/auth/search/6084feee6224e53bdc453c76
+GET  http://localhost:7000/auth/allUsers
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc4YzBlMzEwZTU5MzA5ODU1NDMwMSIsImVtYWlsIjoidGVzdGVyMDJAZ21haWwuY29tIiwicm9sZSI6IlNVUEVSX1VTRVIiLCJpYXQiOjE2MTk0OTYxMzZ9.XPD5ZocPp9XuWc03RmNvthniiO3o4DFPsICWzbezuH8
+
+
+###
+GET http://localhost:7000/auth/search/60878fb195dda21d34301fa0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc4YzBlMzEwZTU5MzA5ODU1NDMwMSIsImVtYWlsIjoidGVzdGVyMDJAZ21haWwuY29tIiwicm9sZSI6IlNVUEVSX1VTRVIiLCJpYXQiOjE2MTk0OTYxMzZ9.XPD5ZocPp9XuWc03RmNvthniiO3o4DFPsICWzbezuH8
 
 
 #   -----------------------------UTILTY---------------------------------
 ###
 POST http://localhost:7000/admin/utility
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc4YzBlMzEwZTU5MzA5ODU1NDMwMSIsImVtYWlsIjoidGVzdGVyMDJAZ21haWwuY29tIiwicm9sZSI6IlNVUEVSX1VTRVIiLCJpYXQiOjE2MTk0OTYxMzZ9.XPD5ZocPp9XuWc03RmNvthniiO3o4DFPsICWzbezuH8
 
 {
    "roles": ["SUPER_USER","ADMIN","DELIVERY_BOY","CUSTOMER"],
@@ -40,12 +49,14 @@ Content-Type: application/json
 ###
 GET  http://localhost:7000/admin/utility
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc4YzBlMzEwZTU5MzA5ODU1NDMwMSIsImVtYWlsIjoidGVzdGVyMDJAZ21haWwuY29tIiwicm9sZSI6IlNVUEVSX1VTRVIiLCJpYXQiOjE2MTk0OTYxMzZ9.XPD5ZocPp9XuWc03RmNvthniiO3o4DFPsICWzbezuH8
 
 
 #   ---------------------------PAYMENT---------------------------------
 ###
 POST http://localhost:7000/payments/createPayment
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc4YzBlMzEwZTU5MzA5ODU1NDMwMSIsImVtYWlsIjoidGVzdGVyMDJAZ21haWwuY29tIiwicm9sZSI6IlNVUEVSX1VTRVIiLCJpYXQiOjE2MTk0OTYxMzZ9.XPD5ZocPp9XuWc03RmNvthniiO3o4DFPsICWzbezuH8
 
 {
     "userId":"6084feee6224e53bdc453c76",
@@ -69,3 +80,64 @@ Content-Type: application/json
 {
     "paymentId":"60863fa0d98ba34190098d6d"
 }
+
+
+#   ---------------------------PAYMENT---------------------------------
+###
+POST http://localhost:7000/deliveries/createDelivery
+Content-Type: application/json
+
+{
+    "userId":"60850ea5873557349cbfd671",
+    "bottleSize" : "500ml"
+}
+
+
+###
+POST  http://localhost:7000/deliveries/getDeliveries
+Content-Type: application/json
+
+{
+    "userId":"60850ea5873557349cbfd671"
+}
+
+
+###
+GET  http://localhost:7000/deliveries/getLatestDeliveryRecord/60866242a012353f00bb224b
+Content-Type: application/json
+
+
+#----------------REgular Sales -----------------
+###
+POST http://localhost:7000/sales/createSale
+Content-Type: application/json
+
+{
+    "paid":200
+}
+
+
+###
+POST  http://localhost:7000/sales/getSales
+Content-Type: application/json
+
+{
+    "userId":"60850ea5873557349cbfd671"
+}
+
+
+###
+GET  http://localhost:7000/sales/getLatestSale/608669120f0d3619e00ebef9
+Content-Type: application/json
+
+
+
+# --------------SUPERUSER------------------
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc4YzBlMzEwZTU5MzA5ODU1NDMwMSIsImVtYWlsIjoidGVzdGVyMDJAZ21haWwuY29tIiwicm9sZSI6IlNVUEVSX1VTRVIiLCJpYXQiOjE2MTk0OTU5NTB9.6TaobT1JQR3aWziyP9DQvjDLFLqAc5iY4hegoRK7aJo
+# {
+#     "email":"tester02@gmail.com",
+#     "name": "Tester02",
+#     "age": 22,
+#     "password" : "tester1234",
+#     "role" : "SUPER_USER"
+# }
