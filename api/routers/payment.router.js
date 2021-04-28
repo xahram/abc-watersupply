@@ -3,6 +3,7 @@ const {
   createPayment,
   getPayments,
   getSinglePaymentRecord,
+  updatePaymentRecord
 } = require("../controllers/payment.controller");
 const {
   accessGranter,
@@ -34,4 +35,10 @@ paymentRouter.post(
   getSinglePaymentRecord
 );
 
+paymentRouter.patch(
+  "/updatePaymentRecord",
+  accessGranter,
+  grantUserAccessToRole,
+  updatePaymentRecord
+);
 module.exports = paymentRouter;

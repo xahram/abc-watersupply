@@ -2,6 +2,8 @@ const express = require("express");
 const {
   utilityController,
   getAllUtilities,
+  updateRateList,
+  updateSubscription
 } = require("../controllers/utility.controller");
 const {
   accessGranter,
@@ -17,6 +19,21 @@ utilityRouter.post(
   accessGranter,
   grantUserAccessToRole,
   utilityController
+);
+
+utilityRouter.patch(
+  "/utility/updateRateList",
+  accessGranter,
+  grantUserAccessToRole,
+  updateRateList
+);
+
+utilityRouter.patch(
+  "/utility/updateSubscription",
+  accessGranter,
+  grantUserAccessToRole,
+  updateSubscription
+  
 );
 
 // For getting all of our utility -> [Users, WaterBottles,Subscriptions]

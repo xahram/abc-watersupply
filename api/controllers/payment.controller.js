@@ -4,7 +4,8 @@ const moment = require("moment");
 const {
   createPaymentSchemaValidator,
   getPaymentRecordOfUserSchemaValidator,
-  singlePaymentRecordValidatorSchema
+  singlePaymentRecordValidatorSchema,
+  updatePaymentRecordSchemaValidator
 } = require("../dependencies/helpers/validation.schema/payment.validation");
 const {
   CREATED,
@@ -22,7 +23,7 @@ const createPayment = async (req, res, next) => {
     const values = await createPaymentSchemaValidator.validateAsync({
       userId,
       paid,
-      dueAmount
+      dueAmount,
     });
 
     // Check If user with that Id Exists Or not
@@ -62,8 +63,14 @@ const createPayment = async (req, res, next) => {
 
 const getPayments = async (req, res, next) => {
   try {
-    const { userId }= await getPaymentRecordOfUserSchemaValidator.validateAsync(req.body)
-    const payments = await Payment.find({ userId }, { __v: 0 }, { sort: { paymentTime: -1 } });
+    const {
+      userId,
+    } = await getPaymentRecordOfUserSchemaValidator.validateAsync(req.body);
+    const payments = await Payment.find(
+      { userId },
+      { __v: 0 },
+      { sort: { paymentTime: -1 } }
+    );
     if (!payments.length)
       return res
         .status(NOT_FOUND)
@@ -74,14 +81,13 @@ const getPayments = async (req, res, next) => {
   }
 };
 
-const getSinglePaymentRecord= async (req, res, next) => {
+const getSinglePaymentRecord = async (req, res, next) => {
   try {
-    const { paymentId }= await singlePaymentRecordValidatorSchema.validateAsync(req.body)
+    const {
+      paymentId,
+    } = await singlePaymentRecordValidatorSchema.validateAsync(req.body);
 
-    const payment = await Payment.findOne(
-      { _id: paymentId },
-      { __v: 0 }
-    );
+    const payment = await Payment.findOne({ _id: paymentId }, { __v: 0 });
     if (!payment)
       return res
         .status(NOT_FOUND)
@@ -92,8 +98,27 @@ const getSinglePaymentRecord= async (req, res, next) => {
   }
 };
 
+const updatePaymentRecord = async (req, res, next) => {
+  try {
+    const values = await updatePaymentRecordSchemaValidator.validateAsync(req.body)
+    values.paymentTime = moment().format();
+
+    const updatedPayment = await Payment.findOneAndUpdate(
+      { _id: values.paymentId },
+      { ...values },
+      { new: true }
+    );
+
+    return res.status(SUCCESS).send({payment: updatedPayment, message: "Successfully Updated"})
+  } catch (error) {
+    return res.status(NOT_FOUND).send({ message: `ERROR: ${error.message}`, error });
+  }
+};
+
+
 module.exports = {
   createPayment,
   getPayments,
-  getSinglePaymentRecord
+  getSinglePaymentRecord,
+  updatePaymentRecord,
 };

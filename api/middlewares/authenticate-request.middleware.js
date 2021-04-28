@@ -59,7 +59,7 @@ const grantUserAccessToRole = (req, res, next) => {
   if (user.role === "SUPER_USER" || user.role === "ADMIN") {
     next();
   } else {
-    console.log("MEOW YIPPEEE");
+    
     return res
       .status(UNAUTHORIZED)
       .send({

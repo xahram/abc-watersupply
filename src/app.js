@@ -38,7 +38,7 @@ app.use("/sales",saleRouter);
 
 // Error Handlers
 app.use((req, res, next) => {
-  const error = new Error("Not Found");
+  const error = new Error("Route Not Found");
   error.status = NOT_FOUND;
 
   next(error);

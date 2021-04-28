@@ -2,9 +2,10 @@ const Delivery = require("../models/delivery.model");
 const User = require("../models/user.model");
 const moment = require("moment");
 const {
-  getBottleSizeArray,
+  checkBottleSizeInDb,
   getUserDeliveriesSchemaValidator,
-  getDeliveryRecordByIdSchemaValidator
+  getDeliveryRecordByIdSchemaValidator,
+  updateDeliveryRecordSchemaValidator,
 } = require("../dependencies/helpers/validation.schema/delivery.validation");
 const {
   CREATED,
@@ -20,7 +21,7 @@ const createDelivery = async (req, res, next) => {
 
   try {
     // Check If Bottle Type Exists in our Database or Not
-    const bottleTypeExists = await getBottleSizeArray(bottleSize);
+    const bottleTypeExists = await checkBottleSizeInDb(bottleSize);
     console.log(bottleTypeExists);
     if (!bottleTypeExists)
       return res
@@ -74,7 +75,9 @@ const getDeliveries = async (req, res, next) => {
 const getDeliveryRecordById = async (req, res, next) => {
   // const { deliveryId } = req.params;
   try {
-    const { deliveryId } = await getDeliveryRecordByIdSchemaValidator.validateAsync(req.params)
+    const {
+      deliveryId,
+    } = await getDeliveryRecordByIdSchemaValidator.validateAsync(req.params);
     const delivery = await Delivery.findOne(
       { _id: deliveryId },
       { __v: 0 },
@@ -90,4 +93,31 @@ const getDeliveryRecordById = async (req, res, next) => {
   }
 };
 
-module.exports = { createDelivery, getDeliveryRecordById, getDeliveries };
+const updateDeliveryRecord = async (req, res, next) => {
+  try {
+    const values = await updateDeliveryRecordSchemaValidator.validateAsync(
+      req.body
+    );
+    const bottleSize = await checkBottleSizeInDb(values.bottleSize);
+    if(!bottleSize) return res.status(NOT_FOUND).send({message: `Bottle Size Not Found in our Record`})
+    
+    const updatedDelivery = await Delivery.findOneAndUpdate(
+      { _id: values.deliveryId },
+      { ...values },
+      { new: true }
+    );
+
+    return res
+      .status(SUCCESS)
+      .send({ delivery: updatedDelivery, message: "Successfully Updated" });
+  } catch (error) {
+    res.status(NOT_FOUND).send({ message: error.message });
+  }
+};
+
+module.exports = {
+  createDelivery,
+  getDeliveryRecordById,
+  getDeliveries,
+  updateDeliveryRecord,
+};

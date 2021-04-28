@@ -7,14 +7,15 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
+    
   })
   .then((result) => {
     logSuccess("Connection Established To ABC-Supply Cluster");
   })
   .catch((error) => {
     logError(error.message);
-    process.exit(1);
+    process.exit(0);
   });
 
 
@@ -28,7 +29,7 @@ mongoose.connection.on("connected", async () => {
 mongoose.connection.on("error", (error) => {
   logError(error.message);
     // Exit process with failure Code:1. "1" is failure code, while "0" is normal exit code
-      process.exit(1);
+      process.exit(0);
 });
 
 

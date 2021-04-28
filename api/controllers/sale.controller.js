@@ -2,7 +2,8 @@ const Sale = require("../models/sales.model");
 const moment = require("moment");
 const {
   createSaleSchemaValidator,
-  getSingleSaleRecordSchemaValidator
+  getSingleSaleRecordSchemaValidator,
+  updateSaleRecordSchemaValidator
 } = require("../dependencies/helpers/validation.schema/sale.validation");
 const {
   CREATED,
@@ -74,8 +75,27 @@ const getSingleSaleRecord = async (req, res, next) => {
   }
 };
 
+
+const updateSaleRecord = async (req, res, next) => {
+  try {
+    const values = await updateSaleRecordSchemaValidator.validateAsync(req.body)
+    values.paymentTime = moment().format();
+    
+    const updatedSale = await Sale.findOneAndUpdate(
+      { _id: values.saleId },
+      { ...values },
+      { new: true }
+    );
+
+    return res.status(SUCCESS).send({sale: updatedSale, message: "Successfully Updated"})
+  } catch (error) {
+    return res.status(NOT_FOUND).send({ message: `ERROR: ${error.message}`, error });
+  }
+};
+
 module.exports = {
   createSale,
   getSingleSaleRecord,
   getSales,
+  updateSaleRecord
 };

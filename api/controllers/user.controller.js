@@ -16,7 +16,9 @@ const {
 const {
   userLoginSchemaValidator,
   userSignUpSchemaValidator,
+  updateUserSchemaValidator,
 } = require("../dependencies/helpers/validation.schema/user.validation");
+const customRolesValidatorSchema = require("../dependencies/helpers/customDbValidaiton.helpers/user.validator");
 
 const signup = async (req, res, next) => {
   // const { email, name, age, role, password } = req.body;
@@ -61,7 +63,9 @@ const signup = async (req, res, next) => {
 const login = async (req, res, next) => {
   // const { email, password } = req.body;
   try {
-    const { email, password } = await userLoginSchemaValidator.validateAsync(req.body);
+    const { email, password } = await userLoginSchemaValidator.validateAsync(
+      req.body
+    );
     const user = await User.findOne({ email });
     if (!user)
       return res
@@ -113,9 +117,43 @@ const getAllUsers = async (req, res, next) => {
     res.status(NOT_FOUND).send({ errorMessage: error.message });
   }
 };
+
+const updateUserData = async (req, res, next) => {
+  // const { userId, age, role, password } = req.body;
+  try {
+    const values = await updateUserSchemaValidator.validateAsync(req.body);
+    const verifiedRole = await customRolesValidatorSchema(values.role);
+
+    if (!verifiedRole)
+      return res
+        .status(NOT_FOUND)
+        .send({ message: "ERROR: Role Not in our database" });
+
+    let password = values.password;
+    let user = { ...values };
+    if (values.password) {
+      password = await generatePassword(values.password, 10);
+      user = { ...values, password };
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: values.userId },
+      { ...user },
+      { new: true }
+    );
+    return res
+      .status(SUCCESS)
+      .send({ user: updatedUser, message: "Successfully Updated" });
+  } catch (error) {
+    return res
+      .status(NOT_FOUND)
+      .send({ message: `ERROR: ${error.message}...`, error });
+  }
+};
 module.exports = {
   signup,
   searchUser,
   login,
   getAllUsers,
+  updateUserData,
 };

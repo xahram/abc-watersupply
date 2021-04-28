@@ -5,7 +5,7 @@ const {getBottleSizesFromDatabase}  = require("../../config")
 // Validation Method is used for getting array of BottleSizes
 // available in the db and we check if the bottle size sent
 // by the client is available in the array returned by this method.
-const getBottleSizeArray = async (bottle) => {
+const checkBottleSizeInDb = async (bottle) => {
   try {
     const bottleTypes = await getBottleSizesFromDatabase()
     if (bottleTypes.includes(bottle)) return Promise.resolve(true);
@@ -25,15 +25,21 @@ const getBottleSizeArray = async (bottle) => {
 };
 
 const getUserDeliveriesSchemaValidator = Joi.object({
-  userId: Joi.string().required()
+  deliveryId: Joi.string().required()
 });
 
 const getDeliveryRecordByIdSchemaValidator = Joi.object({
   deliveryId: Joi.string().required()
 });
 
+const updateDeliveryRecordSchemaValidator = Joi.object({
+  deliveryId: Joi.string().required(),
+  bottleSize : Joi.string().required()
+});
+
 module.exports = {
   getUserDeliveriesSchemaValidator,
-  getBottleSizeArray,
-  getDeliveryRecordByIdSchemaValidator
+  checkBottleSizeInDb,
+  getDeliveryRecordByIdSchemaValidator,
+  updateDeliveryRecordSchemaValidator
 };

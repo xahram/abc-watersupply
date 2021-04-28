@@ -28,16 +28,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhN
 
 
 ###
-GET http://localhost:7000/auth/search/6087a234d9c6163c6c740091
+GET http://localhost:7000/auth/search/6087b6e6b66c2647bcbde238
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTA4NDYxfQ.W7DbtVHlYTO95wnEvsEOnHtol4Gg6SmWDQ0UeDtWaew
 
+
+###
+PATCH http://localhost:7000/auth/updateUser
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTA4NDYxfQ.W7DbtVHlYTO95wnEvsEOnHtol4Gg6SmWDQ0UeDtWaew
+
+{
+    "userId": "6087b6e6b66c2647bcbde238",
+    "role" : "CUSTOMER"
+}
 
 #   -----------------------------UTILTY---------------------------------
 ###
 POST http://localhost:7000/admin/utility
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NDk5ODExfQ.rIxt6YHoYms9OnAZuZJOKNvElKzyRgwstw5_-twsGLU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTA4NDYxfQ.W7DbtVHlYTO95wnEvsEOnHtol4Gg6SmWDQ0UeDtWaew
 
 {
    "roles": ["SUPER_USER","ADMIN","DELIVERY_BOY","CUSTOMER"],
@@ -45,6 +55,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhN
    "subscriptions": [{"name":"WEEKLY", "price":600,"days":7},{"name":"BIWEEKLY", "price":1000,"days":15},{"name":"MONTHLY", "price":4000,"days":30}] 
 }
 
+###
+PATCH  http://localhost:7000/admin/utility/updateRateList
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTA4NDYxfQ.W7DbtVHlYTO95wnEvsEOnHtol4Gg6SmWDQ0UeDtWaew
+
+{
+    "ratelist": {"rateListId": "60890821ffec3b2aa87f0caa","size":"1500ml", "price": 1120}
+}
+
+###
+PATCH  http://localhost:7000/admin/utility/updateSubscription
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTA4NDYxfQ.W7DbtVHlYTO95wnEvsEOnHtol4Gg6SmWDQ0UeDtWaew
+
+{
+    "subscription": {"subscriptionListId": "608908528286c30b0447b3d2","name":"WEEKLY", "days": 10, "price":1500}
+}
 
 ###
 GET  http://localhost:7000/admin/utility
@@ -83,6 +110,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhN
     "paymentId":"6087a7989879bf10288e54df"
 }
 
+###
+PATCH http://localhost:7000/payments/updatePaymentRecord
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTA4NDYxfQ.W7DbtVHlYTO95wnEvsEOnHtol4Gg6SmWDQ0UeDtWaew
+
+{
+        "paymentId":"6087a7989879bf10288e54df",
+        "paid" : 1100,
+        "dueAmount" : 120
+}
+
 
 #   ---------------------------Delivery---------------------------------
 ###
@@ -95,6 +133,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhN
     "bottleSize" : "500ml"
 }
 
+###
+PATCH  http://localhost:7000/deliveries/updateDeliveryRecord
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTAxNTg5fQ.xwJSxamocUUc_g-bQ-a2Tv9MYvkCiIaq_Kwp4j8UR-E
+
+{
+    "deliveryId":"6087a99e9a3f0426b0981191",
+    "bottleSize" : "1000ml"
+}
 
 ###
 POST  http://localhost:7000/deliveries/getDeliveries
@@ -122,6 +169,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhN
     "paid":100
 }
 
+###
+PATCH  http://localhost:7000/sales/updateSaleRecord
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTAxNTg5fQ.xwJSxamocUUc_g-bQ-a2Tv9MYvkCiIaq_Kwp4j8UR-E
+
+{
+    "saleId":"6087ab932dd0833e0ca8bcdd",
+    "paid":100
+}
 
 ###
 POST  http://localhost:7000/sales/getSales

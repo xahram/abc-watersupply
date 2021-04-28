@@ -7,9 +7,9 @@ const {
   createDelivery,
   getDeliveries,
   getDeliveryRecordById,
+  updateDeliveryRecord
 } = require("../controllers/delivery.controller");
 const deliveryRouter = express.Router();
-
 
 // Route For creating Delivery made to Customer
 deliveryRouter.post(
@@ -28,8 +28,7 @@ deliveryRouter.post(
   getDeliveries
 );
 
-
-// Route for getting a single delivery 
+// Route for getting a single delivery
 deliveryRouter.get(
   "/getDeliveryRecordById/:deliveryId",
   accessGranter,
@@ -37,4 +36,10 @@ deliveryRouter.get(
   getDeliveryRecordById
 );
 
+deliveryRouter.patch(
+  "/updateDeliveryRecord",
+  accessGranter,
+  grantUserAccessToRole,
+  updateDeliveryRecord
+);
 module.exports = deliveryRouter;
