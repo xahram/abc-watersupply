@@ -21,6 +21,10 @@ const userSchema = mongoose.Schema({
     type: mongoose.Schema.Types.String,
     validate: roleValidator,
   },
+  subscription: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref : "Utility"
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

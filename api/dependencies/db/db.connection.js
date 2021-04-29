@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const {logSuccess, logError} = require("../helpers/console.helpers");
+const {logSuccess, logError, logInfo} = require("../helpers/console.helpers");
 
 // Connecting to our Mongodb Databse
 mongoose
@@ -36,6 +36,7 @@ mongoose.connection.on("error", (error) => {
 // Close connection to the Database on node process exit
 process.on("SIGINT", async () => {
   await mongoose.connection.close();
+  logInfo("Closing DB Connection on Process Shut down.")
    // Exit process with failure Code:1. "1" is failure code, while "0" is normal exit code
    process.exit(0);
 });

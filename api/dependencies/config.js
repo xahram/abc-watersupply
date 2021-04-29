@@ -25,6 +25,16 @@ module.exports = {
     });
     return Promise.resolve(bottleTypes);
   },
+  
+  getSubscriptions: async ()=> {
+    const [utility] = await Utility.find();
+    if (!utility)
+      return Promise.reject(
+        "No Utility Entry Exists, First Create Utility To Proceed Further"
+      );
+      // Return the Roles from the database back to the caller
+      return Promise.resolve(utility.subscriptions)
+  },
   RESPONSE_STATUS_CODES: {
     SUCCESS: 200,
     CREATED: 201,

@@ -1,5 +1,8 @@
 const Utility = require("../../../models/utility.model");
 
+
+
+// CUSTOM VALIDATOR FOR OUR UTILITY COLLECTION DATA BASE SCHEMA
 module.exports = async (v, type) => {
   try {
     const [utility] = await Utility.find();

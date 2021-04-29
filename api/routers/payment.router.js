@@ -3,7 +3,8 @@ const {
   createPayment,
   getPayments,
   getSinglePaymentRecord,
-  updatePaymentRecord
+  updatePaymentRecord,
+  calculateTotalPaymentForUser
 } = require("../controllers/payment.controller");
 const {
   accessGranter,
@@ -41,4 +42,12 @@ paymentRouter.patch(
   grantUserAccessToRole,
   updatePaymentRecord
 );
+paymentRouter.get(
+  "/calculateTotalPayment/:userId",
+  accessGranter,
+  grantUserAccessToRole,
+  calculateTotalPaymentForUser
+);
+
+
 module.exports = paymentRouter;

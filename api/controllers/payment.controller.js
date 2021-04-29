@@ -5,7 +5,7 @@ const {
   createPaymentSchemaValidator,
   getPaymentRecordOfUserSchemaValidator,
   singlePaymentRecordValidatorSchema,
-  updatePaymentRecordSchemaValidator
+  updatePaymentRecordSchemaValidator,
 } = require("../dependencies/helpers/validation.schema/payment.validation");
 const {
   CREATED,
@@ -15,11 +15,13 @@ const {
   NOT_FOUND,
 } = require("../dependencies/config").RESPONSE_STATUS_CODES;
 
+// CONTROLLER FOR CREATING NEW PAYMENT RECORD
 const createPayment = async (req, res, next) => {
   const { userId, paid, dueAmount } = req.body;
   const paymentTime = moment().format();
 
   try {
+    // VALIDATE INCOMING REQUEST DATA TO VERFIFY USERID, PAID , DUEAMOUNT
     const values = await createPaymentSchemaValidator.validateAsync({
       userId,
       paid,
@@ -35,20 +37,21 @@ const createPayment = async (req, res, next) => {
 
     // Find the Latest Previous Payment Of the user to
     // calculate Total Amount paid So far
-    const previousPayment = await Payment.findOne(
-      { userId },
-      {},
-      { sort: { paymentTime: -1 } }
-    );
+    // const previousPayment = await Payment.findOne(
+    //   { userId },
+    //   {},
+    //   { sort: { paymentTime: -1 } }
+    // );
 
     // Check If the previous Payment Rcord exists to calculate total Payment
-    let totalPayment = previousPayment ? previousPayment.totalAmountPaid : 0;
-    let totalPaymentDue = previousPayment ? previousPayment.totalAmountDue : 0;
+    // let totalPayment = previousPayment ? previousPayment.totalAmountPaid : 0;
+    // let totalPaymentDue = previousPayment ? previousPayment.totalAmountDue : 0;
+
     const payment = new Payment({
       ...values,
       // totalAmount: totalPayment + (paid - dueAmount),
-      totalAmountPaid: totalPayment + paid,
-      totalAmountDue: totalPaymentDue + dueAmount,
+      // totalAmountPaid: totalPayment + paid,
+      // totalAmountDue: totalPaymentDue + dueAmount,
       paymentTime,
     });
 
@@ -81,6 +84,7 @@ const getPayments = async (req, res, next) => {
   }
 };
 
+// GETTING SINGLE PAYMENT RECORD BASED ON PAYMENT ID
 const getSinglePaymentRecord = async (req, res, next) => {
   try {
     const {
@@ -100,25 +104,60 @@ const getSinglePaymentRecord = async (req, res, next) => {
 
 const updatePaymentRecord = async (req, res, next) => {
   try {
-    const values = await updatePaymentRecordSchemaValidator.validateAsync(req.body)
+    const values = await updatePaymentRecordSchemaValidator.validateAsync(
+      req.body
+    );
     values.paymentTime = moment().format();
 
     const updatedPayment = await Payment.findOneAndUpdate(
       { _id: values.paymentId },
-      { ...values },
+      { $set: values },
       { new: true }
     );
 
-    return res.status(SUCCESS).send({payment: updatedPayment, message: "Successfully Updated"})
+    return res
+      .status(SUCCESS)
+      .send({ payment: updatedPayment, message: "Successfully Updated" });
   } catch (error) {
-    return res.status(NOT_FOUND).send({ message: `ERROR: ${error.message}`, error });
+    return res
+      .status(NOT_FOUND)
+      .send({ message: `ERROR: ${error.message}`, error });
   }
 };
 
+const calculateTotalPaymentForUser = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    // const values = await calculateTotalPaymentForUserSchemaValidator.validateAsync(req.body)
+    const totalPayments = await Payment.aggregate([
+      { $match: { _id: userId } },
+      {
+        $group: {
+          user: "$userId",
+          totalAmountPaid: { $sum: "$paid" },
+          totalDueAmount: { $sum: "$dueAmount" },
+        },
+      },
+      {
+        $project: {
+          remainingAmount: {
+            $subtract: ["$totalAmountPaid", "$totalDueAmount"],
+          },
+        }
+      }
+      
+    ]);
+    res.status(SUCCESS).send({ totalPayments });
+  } catch (error) {
+    res.status(NOT_FOUND).send({ error: `ERROR : ${error.message}` });
+  }
+};
 
+// EXPORT ALL CONTROLLERS
 module.exports = {
   createPayment,
   getPayments,
   getSinglePaymentRecord,
   updatePaymentRecord,
+  calculateTotalPaymentForUser,
 };

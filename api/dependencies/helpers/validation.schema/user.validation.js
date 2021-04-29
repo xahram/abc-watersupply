@@ -11,6 +11,7 @@ const userSignUpSchemaValidator = Joi.object({
   age: Joi.number().required().greater(0),
   role: Joi.string().required(),
   password: Joi.string(),
+  subscriptionId: Joi.string()
 });
 
 const userLoginSchemaValidator = Joi.object({

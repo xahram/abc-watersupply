@@ -9,18 +9,19 @@ const {
 const {
   utilitySchemaValidator,
   updateRateListSchemaValidator,
-  updateSubscriptionListSchemaValidator
+  updateSubscriptionListSchemaValidator,
 } = require("../dependencies/helpers/validation.schema/utility.validation");
-const mongoose = require("mongoose");
 
+// UTILITY CONTROLLER TO CREATE ROLES SUBSCRIPTIONS AND RATELIST FOR OUR APP
 const utilityController = async (req, res, next) => {
   const { roles = [], ratelist = [], subscriptions = [] } = req.body;
   try {
-    // Check If the Utility Model is Empty Or Not
+    // CHECK IF THE INCOMING REQUEST HAS VALID FIELDS REQUIRED BY OUR APP
     await utilitySchemaValidator.validateAsync(req.body);
+
+    // Check If the Utility Model is Empty Or Not BY TAKING FIRST UTILITY ELEMENT
     const [utilityObj] = await Utility.find();
     if (!utilityObj) {
-      console.log("Iniside Utility Object");
       const utility = new Utility({
         roles,
         ratelist,
@@ -30,13 +31,15 @@ const utilityController = async (req, res, next) => {
       return res.status(CREATED).send({ message: "CREATED", utility });
     }
 
-    // Check If the values provided in the Request Body
-    // already exist in our database if so reject the request
+    // Check If the values provided in the Request Body already exist in our database if so reject the request
+    // EVALUATES TO TRUE AND REJECT in CASE OF FALSE
 
     const doesNotExist =
+      // TRUE IF THE ROLES PROVIDED AREN'NT IN OUR DATABASE [utilityOBJ]
       roles?.every((role) => {
         return !utilityObj.roles.includes(role);
       }) &&
+      // TRUE IF THE [SIZE] OF THE BOTTLE ISN"T IN OUR DATABASE [utilityObj]
       ratelist?.every((rl) => {
         return (
           utilityObj.ratelist.filter((uRL) => {
@@ -44,6 +47,7 @@ const utilityController = async (req, res, next) => {
           }).length === 0
         );
       }) &&
+      // TRUE IF THE [NAME] OF THE SUBSCRIPTION ISN"T IN OUR DATABASE [utilityOBJ]
       subscriptions?.every((sb) => {
         return (
           utilityObj.subscriptions.filter((uSB) => {
@@ -60,6 +64,7 @@ const utilityController = async (req, res, next) => {
         .status(CONFLICT)
         .send({ message: "Field Already Exists, Please send unique fielts" });
 
+    // CONCAT THE INCOMING REQUEST OPTIONS WITH OUR EXISTING VALUES
     const newRoles = utilityObj.roles.concat(roles);
     const newRateList = utilityObj.ratelist.concat(ratelist);
     const newSubscriptions = utilityObj.subscriptions.concat(subscriptions);
@@ -70,6 +75,8 @@ const utilityController = async (req, res, next) => {
       subscriptions: newSubscriptions,
     });
     await utility.save();
+
+    //UPON SAVING THE NEW UTILITY OBJECT DELETE THE OLD RECORD FROM DB
     await Utility.deleteOne();
     res.status(CREATED).send({ message: "CREATED", utility });
   } catch (error) {
@@ -77,6 +84,7 @@ const utilityController = async (req, res, next) => {
   }
 };
 
+// GET THE LIST OF ALL DATA IN OUR UTILITY COLLECTION
 const getAllUtilities = async (req, res, next) => {
   try {
     const utility = await Utility.find();
@@ -88,36 +96,56 @@ const getAllUtilities = async (req, res, next) => {
   }
 };
 
+// CONTROLLER TO UPDATE THE RATELIST PRESENT IN UTILITY COLLECTION
 const updateRateList = async (req, res, next) => {
   try {
-    const { ratelist } = await updateRateListSchemaValidator.validateAsync(req.body);
-    const updatedUtility = await Utility.updateOne(
+    // VALIDATE INCOMING REQUEST RATELIST FOR CORRECT FIELDS SYNTAX
+    const { ratelist } = await updateRateListSchemaValidator.validateAsync(
+      req.body
+    );
+
+    //FIND THE UTILITY OBJECT WITH THE GIVEN RATELIST ID
+    const updatedUtility = await Utility.findOneAndUpdate(
       { "ratelist._id": ratelist.rateListId },
       {
+        // $ SIGN SHOWS THE MATCHED SUBDOCUMENT BASED ON WHICH UTILITY DOCUMENT
+        // WAS SELECTED ABOVE AND GIVES THE INDEX OF THE MATCHED SUB DOCUMENT ALSO CALLED POSITIONAL $ OPERATOR
         $set: {
-          "ratelist.$": ratelist,
+          "ratelist.$.size": ratelist.size,
+          "ratelist.$.price": ratelist.price,
         },
       },
       { new: true }
-    );
+    ).exec();
 
     return res
       .status(SUCCESS)
-      .send({ sale: updatedUtility, message: "Successfully Updated" });
+      .send({ ratelist: updatedUtility, message: "Successfully Updated" });
   } catch (error) {
     return res
       .status(SERVER_ERROR)
       .send({ message: `Error : ${error.message}` });
   }
 };
+
+// CONTROLLER TO UPDATE THE SUBSCRIPTION PRESENT IN UTILITY COLLECTION
 const updateSubscription = async (req, res, next) => {
   try {
-    const { subscription } = await updateSubscriptionListSchemaValidator.validateAsync(req.body);
-    const updatedUtility = await Utility.updateOne(
+    // VALIDATE INCOMING REQUEST SUBSCRIPTION DATA FOR CORRECT FIELDS SYNTAX
+    const {
+      subscription,
+    } = await updateSubscriptionListSchemaValidator.validateAsync(req.body);
+
+    //FIND THE UTILITY OBJECT WITH THE GIVEN SUBSCRIPTION ID
+    const updatedUtility = await Utility.findOneAndUpdate(
       { "subscriptions._id": subscription.subscriptionListId },
       {
+        // $ SIGN SHOWS THE MATCHED SUBDOCUMENT BASED ON WHICH UTILITY DOCUMENT
+        // WAS SELECTED ABOVE AND GIVES THE INDEX OF THE MATCHED SUB DOCUMENT ALSO CALLED POSITIONAL $ OPERATOR
         $set: {
-          "subscriptions.$": subscription,
+          "subscriptions.$.name": subscription.name,
+          "subscriptions.$.days": subscription.days,
+          "subscriptions.$.price": subscription.price,
         },
       },
       { new: true }
@@ -133,6 +161,8 @@ const updateSubscription = async (req, res, next) => {
   }
 };
 
+
+// EXPORT ALL CONTROLLERS
 module.exports = {
   utilityController,
   getAllUtilities,
