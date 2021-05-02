@@ -40,7 +40,7 @@ const accessGranter = async (req, res, next) => {
 
     if (user.role !== decoded.role.toUpperCase())
       return res.status(UNAUTHORIZED).send({
-        message: "ERROR:'User Role' is not valid to proceed further... ",
+        message: "ERROR:'User Role For This User' is not valid to proceed further... ",
       });
 
     req.tokenData = decoded;

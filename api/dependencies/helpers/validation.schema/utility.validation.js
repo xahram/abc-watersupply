@@ -1,4 +1,6 @@
 const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
+
 
 const utilitySchemaValidator = Joi.object({
   roles: Joi.array().items(Joi.string().required()),
@@ -15,7 +17,7 @@ const utilitySchemaValidator = Joi.object({
 
 const updateRateListSchemaValidator = Joi.object({
   ratelist: Joi.object({
-    rateListId: Joi.string().required(),
+    rateListId: Joi.objectId().required(),
     size: Joi.string(),
     price: Joi.number().greater(0).positive(),
   }),
@@ -23,7 +25,7 @@ const updateRateListSchemaValidator = Joi.object({
 
 const updateSubscriptionListSchemaValidator = Joi.object({
     subscription: Joi.object({
-        subscriptionListId: Joi.string().required(),
+        subscriptionListId: Joi.objectId().required(),
         name: Joi.string(),
         days: Joi.number().greater(0).positive(),
         price: Joi.number().greater(0).positive()

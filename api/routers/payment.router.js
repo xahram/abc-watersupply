@@ -36,12 +36,15 @@ paymentRouter.post(
   getSinglePaymentRecord
 );
 
+// Route for Updating Payment Record based on Payment ID
 paymentRouter.patch(
   "/updatePaymentRecord",
   accessGranter,
   grantUserAccessToRole,
   updatePaymentRecord
 );
+
+// ROute for getting the Sum of Payments and Given User data based on User Id
 paymentRouter.get(
   "/calculateTotalPayment/:userId",
   accessGranter,

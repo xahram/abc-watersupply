@@ -16,7 +16,7 @@ const {
 const utilityController = async (req, res, next) => {
   const { roles = [], ratelist = [], subscriptions = [] } = req.body;
   try {
-    // CHECK IF THE INCOMING REQUEST HAS VALID FIELDS REQUIRED BY OUR APP
+    // Check if the incoming request has valid fields required by our app
     await utilitySchemaValidator.validateAsync(req.body);
 
     // Check If the Utility Model is Empty Or Not BY TAKING FIRST UTILITY ELEMENT
@@ -35,11 +35,11 @@ const utilityController = async (req, res, next) => {
     // EVALUATES TO TRUE AND REJECT in CASE OF FALSE
 
     const doesNotExist =
-      // TRUE IF THE ROLES PROVIDED AREN'NT IN OUR DATABASE [utilityOBJ]
+      // True if the roles provided doesn't already exist in our db
       roles?.every((role) => {
         return !utilityObj.roles.includes(role);
       }) &&
-      // TRUE IF THE [SIZE] OF THE BOTTLE ISN"T IN OUR DATABASE [utilityObj]
+      // True if the [Size] of the bottle isn't inour db [UtilityObj] 
       ratelist?.every((rl) => {
         return (
           utilityObj.ratelist.filter((uRL) => {
@@ -47,7 +47,7 @@ const utilityController = async (req, res, next) => {
           }).length === 0
         );
       }) &&
-      // TRUE IF THE [NAME] OF THE SUBSCRIPTION ISN"T IN OUR DATABASE [utilityOBJ]
+      // TRUE if the [NAME] of the SUBSCRIPTION isn't in our database [utilityOBJ]
       subscriptions?.every((sb) => {
         return (
           utilityObj.subscriptions.filter((uSB) => {
@@ -84,7 +84,9 @@ const utilityController = async (req, res, next) => {
   }
 };
 
-// GET THE LIST OF ALL DATA IN OUR UTILITY COLLECTION
+
+
+// CONTROLLER TO GET THE LIST OF ALL DATA IN OUR UTILITY COLLECTION
 const getAllUtilities = async (req, res, next) => {
   try {
     const utility = await Utility.find();
@@ -99,12 +101,12 @@ const getAllUtilities = async (req, res, next) => {
 // CONTROLLER TO UPDATE THE RATELIST PRESENT IN UTILITY COLLECTION
 const updateRateList = async (req, res, next) => {
   try {
-    // VALIDATE INCOMING REQUEST RATELIST FOR CORRECT FIELDS SYNTAX
+    // Validate incoming request's RateList for Correct fields syntax 
     const { ratelist } = await updateRateListSchemaValidator.validateAsync(
       req.body
     );
 
-    //FIND THE UTILITY OBJECT WITH THE GIVEN RATELIST ID
+    //Find the utility object witht the given ratelist ID
     const updatedUtility = await Utility.findOneAndUpdate(
       { "ratelist._id": ratelist.rateListId },
       {
@@ -131,12 +133,12 @@ const updateRateList = async (req, res, next) => {
 // CONTROLLER TO UPDATE THE SUBSCRIPTION PRESENT IN UTILITY COLLECTION
 const updateSubscription = async (req, res, next) => {
   try {
-    // VALIDATE INCOMING REQUEST SUBSCRIPTION DATA FOR CORRECT FIELDS SYNTAX
+    // Validate Incoming request Subsciption data for correct fields syntax
     const {
       subscription,
     } = await updateSubscriptionListSchemaValidator.validateAsync(req.body);
 
-    //FIND THE UTILITY OBJECT WITH THE GIVEN SUBSCRIPTION ID
+    // Find the utility object with the given Subsciption ID
     const updatedUtility = await Utility.findOneAndUpdate(
       { "subscriptions._id": subscription.subscriptionListId },
       {

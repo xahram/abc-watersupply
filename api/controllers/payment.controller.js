@@ -6,6 +6,7 @@ const {
   getPaymentRecordOfUserSchemaValidator,
   singlePaymentRecordValidatorSchema,
   updatePaymentRecordSchemaValidator,
+  calculateTotalPaymentForUserSchemaValidator
 } = require("../dependencies/helpers/validation.schema/payment.validation");
 const {
   CREATED,
@@ -14,6 +15,8 @@ const {
   CONFLICT,
   NOT_FOUND,
 } = require("../dependencies/config").RESPONSE_STATUS_CODES;
+const mongoose = require("mongoose");
+
 
 // CONTROLLER FOR CREATING NEW PAYMENT RECORD
 const createPayment = async (req, res, next) => {
@@ -64,6 +67,8 @@ const createPayment = async (req, res, next) => {
   }
 };
 
+
+// CONTROLLER TO GET ALL THE PAYMENTS OF A GIVEN USER
 const getPayments = async (req, res, next) => {
   try {
     const {
@@ -84,6 +89,7 @@ const getPayments = async (req, res, next) => {
   }
 };
 
+
 // GETTING SINGLE PAYMENT RECORD BASED ON PAYMENT ID
 const getSinglePaymentRecord = async (req, res, next) => {
   try {
@@ -102,6 +108,8 @@ const getSinglePaymentRecord = async (req, res, next) => {
   }
 };
 
+
+// CONTROLLER FOR UPDATING A PAYMENT RECORD BASED ON PAYMENTID 
 const updatePaymentRecord = async (req, res, next) => {
   try {
     const values = await updatePaymentRecordSchemaValidator.validateAsync(
@@ -125,29 +133,60 @@ const updatePaymentRecord = async (req, res, next) => {
   }
 };
 
+
+// CONTROLLER TO CALCULATE THE TOTAL PAYMENT PRICE OF USER BASED ON ITS ID
 const calculateTotalPaymentForUser = async (req, res, next) => {
   try {
-    const { userId } = req.params;
-    // const values = await calculateTotalPaymentForUserSchemaValidator.validateAsync(req.body)
+
+    // Validate THe incoming request Schema FOr valid User Id
+    const {userId} = await calculateTotalPaymentForUserSchemaValidator.validateAsync(req.params)
+  
     const totalPayments = await Payment.aggregate([
-      { $match: { _id: userId } },
+      // Stage 1 :  Match the user based on incoming userId in the Payment Collection
+      { $match: { userId: mongoose.Types.ObjectId(userId) } },
+
+      // Stage 2 : Group the user based on userId field PRESENT in the matched Documents
+      // here _id field is important because left hand side in the group stage must be accumulator
       {
         $group: {
-          user: "$userId",
+          _id: "$userId",
           totalAmountPaid: { $sum: "$paid" },
           totalDueAmount: { $sum: "$dueAmount" },
         },
       },
+
+      // Stage 3 : From the previous stage Only get the fields marked with 1
+      // and calculate the amount remaining based on the difference
       {
         $project: {
+          _id: 1,
+          totalAmountPaid: 1,
+          totalDueAmount: 1,
           remainingAmount: {
             $subtract: ["$totalAmountPaid", "$totalDueAmount"],
           },
-        }
-      }
-      
+        },
+      },
+
+      // Stage 4 : Look for the USERS Collection from our Payment COllection
+      // Check _id Field we are getting from the previous stage and look for
+      // a match for FOreignField in the USERS collection (_id Of USERS Collection).
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
     ]);
-    res.status(SUCCESS).send({ totalPayments });
+
+    if (!totalPayments.length)
+      return res.status(NOT_FOUND).send({
+        message: `ERROR : No Payment Record for the given user found...`,
+      });
+
+    res.status(SUCCESS).send({ totalPayments: totalPayments });
   } catch (error) {
     res.status(NOT_FOUND).send({ error: `ERROR : ${error.message}` });
   }

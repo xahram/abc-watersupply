@@ -1,24 +1,29 @@
 const schedule = require("node-schedule");
-const Payment = require("../../models/payment.model");
-const Utility = require("../../models/utility.model");
-const { logError, logInfo } = require("../helpers/console.helpers");
+const Payment = require("../../../models/payment.model");
+const Utility = require("../../../models/utility.model");
+const { logError, logInfo } = require("../../helpers/console.helpers");
 const moment = require("moment");
 
 const scheduledPayment = async (subscriptionId, userId) => {
   let job;
   try {
+    //
     const { subscriptions } = await Utility.findOne(
       {
+        // This will match the Whole utiltiy Document based on
+        // match id on subsciprition subdocument
         "subscriptions._id": subscriptionId,
       },
+
+      // This will only select the matched sub document because of position $
       { "subscriptions.$": 1 }
     );
     console.log(subscriptions[0]);
 
-    let scheduleTime = subscriptions[0].days;
     if (!subscriptions.length)
       return new Error("Subscription Unavailable at the moment");
 
+    let scheduleTime = subscriptions[0].days;
     job = schedule.scheduleJob(
       `*/${scheduleTime} * * * * *`,
       async function () {
@@ -31,12 +36,12 @@ const scheduledPayment = async (subscriptionId, userId) => {
         await payment
           .save()
           .then((payment) => {
-            return payment;
+            logInfo(payment);
           })
           .catch((err) => {
-            return `ERROR : ${err.message}`;
+            logInfo(`ERROR : ${err.message}`);
           });
-
+          return payment
       }
     );
   } catch (error) {
@@ -44,7 +49,9 @@ const scheduledPayment = async (subscriptionId, userId) => {
     return new Error(error.message);
   }
 
-  job.on("run", (data) => logInfo(data._id));
+  // job.on("run", (data) => logInfo(data));
 };
+
+
 
 module.exports = scheduledPayment;

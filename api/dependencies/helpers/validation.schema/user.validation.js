@@ -1,4 +1,5 @@
 const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 
 const userSignUpSchemaValidator = Joi.object({
   email: Joi.string()
@@ -25,7 +26,7 @@ const userLoginSchemaValidator = Joi.object({
 });
 
 const updateUserSchemaValidator = Joi.object({
-  userId: Joi.string().required(),
+  userId: Joi.objectId().required(),
   name: Joi.string(),
   age: Joi.number().greater(0).positive(),
   password: Joi.string(),

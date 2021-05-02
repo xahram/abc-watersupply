@@ -19,13 +19,10 @@ const {
   updateUserSchemaValidator,
 } = require("../dependencies/helpers/validation.schema/user.validation");
 const customRolesValidatorSchema = require("../dependencies/helpers/customDbValidaiton.helpers/user.validator");
-const scheduledPayment = require("../dependencies/subscription-payments/subscriptionPayments.schedule");
+const scheduledPayment = require("../dependencies/internal-services/subscription-payments/subscriptionPayments.schedule");
 
-
-
-// SIGNUP CONTROLLER FOR ALL USERS 
+// SIGNUP CONTROLLER FOR ALL USERS
 const signup = async (req, res, next) => {
-
   try {
     // Validate The incoming Requests Fields
     const {
@@ -42,8 +39,11 @@ const signup = async (req, res, next) => {
     if (verifyEmailExists)
       return res.status(CONFLICT).send({ message: "Email Already In Use" });
 
-    // CHECK IF USER ROLE IS 'CUSTOMER' AND IT has missing Subscription ID
-    if (role === "CUSTOMER" && !subscriptionId && password)
+    // Check if USER ROLE is 'CUSTOMER' AND it has missing Subscription ID
+    if (
+      (role === "CUSTOMER" && !subscriptionId) ||
+      (role === "CUSTOMER" && password)
+    )
       return res.status(BAD_REQUEST).send({
         message:
           "Customer Should not have a Password and Must contain Subscription",
@@ -52,7 +52,7 @@ const signup = async (req, res, next) => {
     let user;
 
     // Check if the password field exists or not in case of Customers or Delivery Boys
-   
+
     if (password) {
       // Generate Hash Password
       const hashPassword = await generatePassword(password, 10);
@@ -62,7 +62,7 @@ const signup = async (req, res, next) => {
       user = new User({ email, name, age, role, subscription: subscriptionId });
       await user.save();
 
-      //START CHAARGING PAYMENTS BASED ON SUBSCRIPTION DATA
+      //START CHARGING PAYMENTS BASED ON SUBSCRIPTION DATA
       await scheduledPayment(subscriptionId, user._id);
     }
 
@@ -78,18 +78,14 @@ const signup = async (req, res, next) => {
   }
 };
 
-
-
-
 // LOGIN CONTROLLER
 const login = async (req, res, next) => {
-  
   try {
     const { email, password } = await userLoginSchemaValidator.validateAsync(
       req.body
     );
 
-    // CHECK IF THE EMAIL PROVIDED EXISTS
+    // Check if the email provided exists or not
     const user = await User.findOne({ email });
     if (!user)
       return res
@@ -97,8 +93,8 @@ const login = async (req, res, next) => {
         .send({ messsage: "User Not Found... Please Try Again" });
 
     const result = await verifyPasswordHash(password, user.password);
-    
-    // IF THE PASSWORD PROVIDED IN REQUEST DOESNT MATCH
+
+    // if the password provided in the request doesn't match
     if (!result)
       return res
         .status(NOT_FOUND)
@@ -122,24 +118,19 @@ const login = async (req, res, next) => {
   }
 };
 
-
-
-
 // SEARCH USER BASED ON USERID CONTROLLER
 const searchUser = async (req, res, next) => {
   try {
     // Search for user with the given Id and exclude password and v
     const user = await (
-      await User.findById(req.params.id, { password: 0, __v: 0 })).populate("role");
+      await User.findById(req.params.id, { password: 0, __v: 0 })
+    ).populate("role");
 
     return res.status(200).send({ user });
-
   } catch (error) {
     next(error);
   }
 };
-
-
 
 // CONTROLLER FOR GETTING ALL USERS
 const getAllUsers = async (req, res, next) => {
@@ -156,7 +147,6 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
-
 // UPDATE USER INFORMATION CONTROLLER
 const updateUserData = async (req, res, next) => {
   try {
@@ -165,7 +155,7 @@ const updateUserData = async (req, res, next) => {
     // Check if the provided Role exists in our Database RETURNS BOOLEAN VALUE
     const verifiedRole = await customRolesValidatorSchema(values.role);
 
-    //IN CASE THE RETURN VALUE IS FALSE RETURN ERROR
+    //In case the role provided doesn't exists in our db
     if (!verifiedRole)
       return res
         .status(NOT_FOUND)
@@ -174,7 +164,7 @@ const updateUserData = async (req, res, next) => {
     let password = values.password;
     let user = { ...values };
 
-    // GENERATE HASH IF THE PASSWORD FIELD IS PROVIDED IN REQUEST
+    // Generate Hash if the password field is provided in request in case of SUPER_ADMIN | ADMIN
     if (values.password) {
       password = await generatePassword(values.password, 10);
       user = { ...values, password };
@@ -195,8 +185,6 @@ const updateUserData = async (req, res, next) => {
       .send({ message: `ERROR: ${error.message}...`, error });
   }
 };
-
-
 
 // EXPORT ALL CONTROLLERS
 module.exports = {

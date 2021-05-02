@@ -8,6 +8,7 @@ const {
   getSingleSaleRecord,
   getSales,
   updateSaleRecord,
+  calculateTotalSale,
 } = require("../controllers/sale.controller");
 const saleRouter = express.Router();
 
@@ -33,11 +34,21 @@ saleRouter.get(
   getSingleSaleRecord
 );
 
+//Route for getting A Total sales 
+
 saleRouter.patch(
   "/updateSaleRecord/",
   accessGranter,
   grantUserAccessToRole,
   updateSaleRecord
 );
+
+saleRouter.get(
+  "/totalSales",
+  accessGranter,
+  grantUserAccessToRole,
+  calculateTotalSale
+);
+
 
 module.exports = saleRouter;

@@ -7,7 +7,8 @@ const {
   createDelivery,
   getDeliveries,
   getDeliveryRecordById,
-  updateDeliveryRecord
+  updateDeliveryRecord,
+  calculateDeliveryCostBasedOnUserId,
 } = require("../controllers/delivery.controller");
 const deliveryRouter = express.Router();
 
@@ -42,4 +43,12 @@ deliveryRouter.patch(
   grantUserAccessToRole,
   updateDeliveryRecord
 );
+
+deliveryRouter.get(
+  "/calculateDeliveryCost/:userId",
+  accessGranter,
+  grantUserAccessToRole,
+  calculateDeliveryCostBasedOnUserId
+);
+
 module.exports = deliveryRouter;
