@@ -177,9 +177,6 @@ const calculateDeliveryCostBasedOnUserId = async (req, res, next) => {
           // pipeline will Change the context of '$' from "Delivery" -> "Utility" Collection
 
           pipeline: [
-            // Match all Utility Objects that are in the range of Specified Bottles
-            // This stage will match the WHOLE utility Object and embed as childInfo property Array
-            // { $match: { $expr: { $in: ["$$size", "$ratelist.size"] } } },
 
             // Stage 2.1 : This Stage will break the Ratelist Array into Single Ratelist Objects, 
             // with multiple copies of Utility Obj each containing unique Ratelist Obj
