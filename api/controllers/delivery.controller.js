@@ -152,7 +152,7 @@ const updateDeliveryRecord = async (req, res, next) => {
 // CONTROLLER TO CALCULATE THE TOTAL PRICE OF DELIVERIES TO ONE USER BASED ON ID
 const calculateDeliveryCostBasedOnUserId = async (req, res, next) => {
   try {
-    // Validate THe incoming request Schema FOr valid User Id
+    // Validate THe incoming request Schema for valid User Id
     const {
       userId,
     } = await calculateDeliveryCostValidationSchema.validateAsync(req.params);

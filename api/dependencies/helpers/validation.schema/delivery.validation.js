@@ -24,7 +24,7 @@ const checkBottleSizeInDb = async (bottle) => {
 };
 
 const getUserDeliveriesSchemaValidator = Joi.object({
-  deliveryId: Joi.objectId().required(),
+  userId: Joi.objectId().required(),
 });
 
 const getDeliveryRecordByIdSchemaValidator = Joi.object({

@@ -17,6 +17,7 @@ const {
   userLoginSchemaValidator,
   userSignUpSchemaValidator,
   updateUserSchemaValidator,
+  searchUserValidationSchema,
 } = require("../dependencies/helpers/validation.schema/user.validation");
 const customRolesValidatorSchema = require("../dependencies/helpers/customDbValidaiton.helpers/user.validator");
 const scheduledPayment = require("../dependencies/internal-services/subscription-payments/subscriptionPayments.schedule");
@@ -42,7 +43,7 @@ const signup = async (req, res, next) => {
     // Check if USER ROLE is 'CUSTOMER' AND it has missing Subscription ID
     if (
       (role === "CUSTOMER" && !subscriptionId) ||
-      (role === "CUSTOMER" && password)
+      (["CUSTOMER", "DELIVERY_BOY"].includes(role) && password)
     )
       return res.status(BAD_REQUEST).send({
         message:
@@ -92,10 +93,10 @@ const login = async (req, res, next) => {
         .status(NOT_FOUND)
         .send({ messsage: "User Not Found... Please Try Again" });
 
-    const result = await verifyPasswordHash(password, user.password);
+    const isMatched = await verifyPasswordHash(password, user.password);
 
     // if the password provided in the request doesn't match
-    if (!result)
+    if (!isMatched)
       return res
         .status(NOT_FOUND)
         .send({ message: "Email or/and Password Incorrect" });
@@ -121,12 +122,16 @@ const login = async (req, res, next) => {
 // SEARCH USER BASED ON USERID CONTROLLER
 const searchUser = async (req, res, next) => {
   try {
+    const { id } = await searchUserValidationSchema.validateAsync(req.params);
     // Search for user with the given Id and exclude password and v
-    const user = await (
-      await User.findById(req.params.id, { password: 0, __v: 0 })
-    ).populate("role");
+    const user = await await User.findById(id, { password: 0, __v: 0 });
 
-    return res.status(200).send({ user });
+    if (!user)
+      return res
+        .status(NOT_FOUND)
+        .send({ message: `ERROR: User with the following Id doesn't exists` });
+
+    return res.status(SUCCESS).send({ user });
   } catch (error) {
     next(error);
   }

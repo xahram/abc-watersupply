@@ -27,13 +27,20 @@ const userLoginSchemaValidator = Joi.object({
 
 const updateUserSchemaValidator = Joi.object({
   userId: Joi.objectId().required(),
+  subscription: Joi.objectId(),
   name: Joi.string(),
   age: Joi.number().greater(0).positive(),
   password: Joi.string(),
 }).unknown();
 
+
+const searchUserValidationSchema = Joi.object({
+  id : Joi.objectId().required()
+})
+
 module.exports = {
   userSignUpSchemaValidator,
   userLoginSchemaValidator,
-  updateUserSchemaValidator
+  updateUserSchemaValidator,
+  searchUserValidationSchema
 };
