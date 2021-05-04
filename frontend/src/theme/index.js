@@ -2,7 +2,7 @@ import { createMuiTheme, colors, responsiveFontSizes } from "@material-ui/core";
 import _ from 'lodash';
 import typography from './typography';
 import { softShadows, strongShadows } from './shadows';
-import { THEMES } from '../constants';
+import { THEMES } from '../constants/index';
 
 
 const baseConfig = {
@@ -52,10 +52,10 @@ const themeConfigs = [
         paper: colors.common.white,
       },
       primary: {
-        main: "#F38F19",
+        main: "#7f5eff",
       },
       secondary: {
-        main: "#F38F19",
+        main: "#1ae4ff",
       },
       text: {
         primary: colors.blueGrey[900],

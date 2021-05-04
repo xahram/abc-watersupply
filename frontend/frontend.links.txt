@@ -4,3 +4,29 @@ Login Page -> Create new User Form Page
 ------------ Scalable Redux ------------
 https://www.genui.com/resources/modular-redux
 
+
+------------ React Redux Auth Gurads ----------
+https://levelup.gitconnected.com/react-redux-hooks-useselector-and-usedispatch-f7d8c7f75cdd
+
+
+----------- BrowserRouter vs ROuter for creating browser history-----
+tldr: Browserrouter handles ui and browser hsitory automatically While Router needs history package to handle browser history
+if you pass history prop to browser router history.push() won't work Router is low level api and BrowserRouter extends Router for further functionalities
+https://stackoverflow.com/questions/56707885/browserrouter-vs-router-with-history-push
+
+
+----------Formik ---------------
+https://stackoverflow.com/questions/57006718/what-is-the-difference-betwee-submitform-handlesubmit-onsubmit-in-formik
+submithandler will tie onSubmit of formik to submit event
+
+
+------------ axios Interceptors-----------
+https://stackoverflow.com/questions/52737078/how-can-you-use-axios-interceptors
+
+---------------- COLORS THEMES-------------
+Default Color : #F38F19
+Secondary Color : #F38F19
+active : #F38F19
+Extra Color : #7f5eff  || #1ae4ff || #d670ca
+
+

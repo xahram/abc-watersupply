@@ -3,15 +3,18 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { configureStore } from "src/store";
+import { configureStore } from "./store/index";
 import { Provider } from "react-redux";
+import { SettingsProvider } from "./context/SettingContext";
 
 const store = configureStore();
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <SettingsProvider>
+        <App />
+      </SettingsProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
