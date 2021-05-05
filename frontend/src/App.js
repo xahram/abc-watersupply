@@ -4,6 +4,9 @@ import { ThemeProvider, makeStyles, createStyles } from "@material-ui/core";
 import { createTheme } from "./theme/index";
 import useSettings from "./hooks/useSettings";
 import Routes from "./routes/Routes";
+import { Toaster } from "react-hot-toast";
+import React from "react";
+
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -36,10 +39,13 @@ function App() {
 
   const { settings } = useSettings();
 
+
+
   return (
     <div className="App">
       <ThemeProvider theme={createTheme(settings)}>
         <BrowserRouter>
+          <Toaster />
           <Routes></Routes>
         </BrowserRouter>
       </ThemeProvider>

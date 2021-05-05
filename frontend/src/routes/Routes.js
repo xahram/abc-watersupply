@@ -1,8 +1,9 @@
 import React, { lazy, Suspense, Fragment } from "react";
 import { Switch, Redirect, Route } from "react-router-dom";
 import LoadingScreen from "../components/LoadingScreen/LoadingScreen";
+import AuthGuard from "../components/Guards/AuthGuard";
+import MainLayout from "../layout/MainLayout";
 // import GuestGuard from "src/components/GuestGuard";
-
 
 const routesConfig = [
   {
@@ -10,23 +11,30 @@ const routesConfig = [
     path: "/",
     component: () => <Redirect to="/login" />,
   },
-//   {
-//     exact: true,
-//     path: "/404",
-//     component: lazy(() => import("src/views/pages/Error404View")),
-//   },
+  {
+    exact: true,
+    path: "/dashboard",
+    guard: AuthGuard,
+    layout: MainLayout,
+    component: lazy(() => import("../components/Dashboard/Dashboard")),
+  },
+  //   {
+  //     exact: true,
+  //     path: "/404",
+  //     component: lazy(() => import("src/views/pages/Error404View")),
+  //   },
   {
     exact: true,
     // guard: GuestGuard,
     path: "/login",
     component: lazy(() => import("../components/Auth/LoginView/LoginView")),
   },
-//   {
-//     exact: true,
-//     guard: GuestGuard,
-//     path: "/register",
-//     component: lazy(() => import("src/views/auth/RegisterView")),
-//   }
+  //   {
+  //     exact: true,
+  //     guard: GuestGuard,
+  //     path: "/register",
+  //     component: lazy(() => import("src/views/auth/RegisterView")),
+  //   }
   //   {
   //     path: '*',
   //     layout: MainLayout,

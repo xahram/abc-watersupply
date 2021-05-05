@@ -12,9 +12,12 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import LoginImage from "../../../assets/images/register.gif";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../../actions/authActions";
 
 function Copyright() {
   return (
@@ -64,13 +67,18 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginView = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values));
+    onSubmit: async (values) => {
+      await dispatch(login(values.email, values.password));
+      props.history.push("/dashboard");
+
     },
 
     validationSchema: Yup.object({
@@ -141,7 +149,11 @@ const LoginView = (props) => {
               color="primary"
               className={classes.submit}
             >
-              Sign In
+              {auth.loading ? (
+                <CircularProgress color="secondary" size="1.5rem" />
+              ) : (
+                "Sign In"
+              )}
             </Button>
             <Grid container>
               <Grid item xs>

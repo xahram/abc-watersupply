@@ -1,14 +1,14 @@
 import axios from "axios";
-
+import { API_BASE_URL } from "../config/index";
 const instance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  baseURL: API_BASE_URL,
 });
 
 instance.interceptors.request.use(
   (config) => {
-    console.log(config);
     return config;
   },
   (error) => {
@@ -22,7 +22,7 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    return Promise.reject(error.message);
+    return Promise.reject(error);
   }
 );
 

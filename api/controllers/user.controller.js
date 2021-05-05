@@ -91,7 +91,7 @@ const login = async (req, res, next) => {
     if (!user)
       return res
         .status(NOT_FOUND)
-        .send({ messsage: "User Not Found... Please Try Again" });
+        .send({ message: "User Not Found... Please Try Again" });
 
     const isMatched = await verifyPasswordHash(password, user.password);
 

@@ -30,3 +30,5 @@ active : #F38F19
 Extra Color : #7f5eff  || #1ae4ff || #d670ca
 
 
+----------- Page Refresh Event Handler ------
+https://stackoverflow.com/questions/39084924/componentwillunmount-not-being-called-when-refreshing-the-current-page
