@@ -1,23 +1,19 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import List from '../../../layout/List/List'
-import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 
+import Divider from "@material-ui/core/Divider";
+import List from "../../../layout/List/List";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import { SIDEBAR_ITEMS_1, SIDEBAR_ITEMS_2 } from "../../../config/index";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "none",
     [theme.breakpoints.up("sm")]: {
-        display: "flex"
-    }
+      display: "flex",
+    },
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -28,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     flexShrink: 0,
 
     //Custom clsses
-    height: "90vh"
+    height: "90vh",
   },
   drawerPaper: {
     width: drawerWidth,
@@ -47,7 +43,6 @@ export default function PermanentDrawerLeft() {
 
   return (
     <div className={classes.root}>
-
       <Paper
         elevation={10}
         className={classes.drawer}
@@ -59,9 +54,9 @@ export default function PermanentDrawerLeft() {
       >
         <div className={classes.toolbar} />
         <Divider />
-        <List list={["All mail", "Trash", "Spam"]}></List>
+        <List list={SIDEBAR_ITEMS_1}></List>
         <Divider />
-        <List list={["All mail", "Trash", "Spam"]}></List>
+        <List list={SIDEBAR_ITEMS_2}></List>
       </Paper>
     </div>
   );

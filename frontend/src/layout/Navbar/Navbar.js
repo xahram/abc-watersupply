@@ -187,7 +187,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <div className={classes.grow}>
-      <Sidedrawer toggleDrawer={toggleDrawer} state={state} anchor="left"/>
+      <Sidedrawer toggleDrawer={toggleDrawer} state={state} anchor="left" />
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -218,12 +218,15 @@ export default function PrimarySearchAppBar() {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
+              <Badge
+                // badgeContent={4}
+                color="secondary"
+              >
                 <MailIcon />
               </Badge>
             </IconButton>
             <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
+              <Badge color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

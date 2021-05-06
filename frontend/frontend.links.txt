@@ -32,3 +32,7 @@ Extra Color : #7f5eff  || #1ae4ff || #d670ca
 
 ----------- Page Refresh Event Handler ------
 https://stackoverflow.com/questions/39084924/componentwillunmount-not-being-called-when-refreshing-the-current-page
+
+
+----------- React Router catch all route ----------
+https://stackoverflow.com/questions/51457480/react-router-4-catch-all-route
