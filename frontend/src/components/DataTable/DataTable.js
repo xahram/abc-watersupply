@@ -8,42 +8,9 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
 import { Typography } from "@material-ui/core";
-import CustomerInfo from "../CustomerInfo/CustomerInfo";
 import Skeleton from 'react-loading-skeleton';
 
-const columns = [
-  { id: "name", label: "Name", minWidth: 100 },
-  { id: "email", label: "Email", minWidth: 100 },
-  { id: "role", label: "Role", minWidth: 100 },
-  {
-    id: "age",
-    label: "Age",
-    minWidth: 100,
-    align: "right",
-  },
-  {
-    id: "subscription",
-    label: "Subscription",
-    minWidth: 100,
-    align: "right",
-  },
-  {
-    id: "edit",
-    label: "Edit",
-    minWidth: 100,
-    align: "right",
-  },
-  //   { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
-  //   {
-  //     id: 'size',
-  //     label: 'Size\u00a0(km\u00b2)',
-  //     minWidth: 170,
-  //     align: 'right',
-  //   },
-];
 
 const useStyles = makeStyles({
   root: {
@@ -55,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function StickyHeadTable({ customers, handleOpen , loading }) {
+export default function StickyHeadTable({ columns, rows , loading }) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -69,27 +36,8 @@ export default function StickyHeadTable({ customers, handleOpen , loading }) {
     setPage(0);
   };
 
-  const updatedUser = customers.map((user) => ({
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    age: user.age,
-    subscription: user.subscription ? user.subscription : "none",
-    edit: (
-      <IconButton
-        edge="start"
-        color="inherit"
-        onClick={() => {
-          handleOpen(user);
-        }}
-      >
-        <EditIcon />
-      </IconButton>
-    ),
-  }));
-  const rows = updatedUser;
 
-  const customerTable = loading ? <Skeleton width="100%" height="100%" count={1}/> : (
+  const table = loading ? <Skeleton count={10}/> : (
     <Paper elevation={7} className={classes.root}>
       <Typography align="left" variant="h2" color="primary">
         Users
@@ -147,5 +95,5 @@ export default function StickyHeadTable({ customers, handleOpen , loading }) {
       />
     </Paper>
   );
-  return customerTable
+  return table
 }

@@ -157,14 +157,16 @@ const updateUserData = async (req, res, next) => {
   try {
     const values = await updateUserSchemaValidator.validateAsync(req.body);
 
-    // Check if the provided Role exists in our Database RETURNS BOOLEAN VALUE
-    const verifiedRole = await customRolesValidatorSchema(values.role);
-
-    //In case the role provided doesn't exists in our db
-    if (!verifiedRole)
-      return res
-        .status(NOT_FOUND)
-        .send({ message: "ERROR: Role Not in our database" });
+    //Check if role is provided in request body
+    if (values.role) {
+      // Check if the provided Role exists in our Database RETURNS BOOLEAN VALUE
+      const verifiedRole = await customRolesValidatorSchema(values.role);
+      //In case the role provided doesn't exists in our db
+      if (!verifiedRole)
+        return res
+          .status(NOT_FOUND)
+          .send({ message: "ERROR: Role Not in our database" });
+    }
 
     let password = values.password;
     let user = { ...values };

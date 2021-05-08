@@ -7,3 +7,4 @@ export const LOCALSTORAGE_ACCESS_TOKEN_NAME = "accessToken"
 
 export const SIDEBAR_ITEMS_1 = ["Users","Deliveries", "Sales","Utilities"]
 export const SIDEBAR_ITEMS_2 = ["Settings", "Logout"]
+

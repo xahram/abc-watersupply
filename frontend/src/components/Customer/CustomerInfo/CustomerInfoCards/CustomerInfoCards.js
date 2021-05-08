@@ -18,9 +18,9 @@ export default function CustomerInfo({ totalCustomers, user }) {
     { name: "Total Users", value: totalCustomers },
     { name: "Role", value: user.role ? user.role : "Admin" },
     { name: "Subscription", value: "none" },
-  ].map((card) => {
+  ].map((card,i) => {
     return (
-      <Paper className={classes.root} elevation={6}>
+      <Paper key={i} className={classes.root} elevation={6}>
         <Typography className={classes.typography} variant="h3" align="left">
           {card.name}
         </Typography>

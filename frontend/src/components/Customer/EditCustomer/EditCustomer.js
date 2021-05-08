@@ -1,17 +1,23 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
 
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import LoginImage from "../../../assets/images/register.gif";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+
+import Select from "@material-ui/core/Select";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
+import Fields from "./Fields/Fields";
+import { List } from "@material-ui/core";
+import {
+  updateCustomer,
+  getAllCustomers,
+} from "../../../actions/customerActions";
 
 const useStyles = makeStyles((theme) => ({
   //   root: {
@@ -44,32 +50,58 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  selectlabel: {
+    marginTop: "1rem",
+  },
+  list: {
+    width: "60vw",
+  },
+  selectlabel: {
+    marginTop: "1rem",
+  },
+  select: {
+    width: "100%",
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
-export default function EditCustomer({ currentUser }) {
+export default function EditCustomer({ currentUser, handleClose }) {
   const classes = useStyles();
+  const [loading, setLoading] = React.useState(false);
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
+  const roles = useSelector((state) => state.utilities.roles);
 
   const formik = useFormik({
     initialValues: {
-      userId: "",
-      name: "",
-      age: 1,
-      subscription: "",
-      password: "",
+      name: currentUser.name,
+      email: currentUser.email,
+      age: currentUser.age,
+      role: currentUser.role,
+      // password: "",
     },
     onSubmit: async (values) => {
-      await dispatch();
+      values.userId = currentUser._id;
+      setLoading(true);
+      await dispatch(updateCustomer(values));
+      await dispatch(getAllCustomers());
+      setLoading(false);
+      handleClose();
     },
 
     validationSchema: Yup.object({
-      name: Yup.string().email("Invalid email address"),
+      name: Yup.string().max(20, "Must be 20 characters or less"),
       age: Yup.string(),
-      subscription: Yup.string().email("Invalid email address"),
-      password: Yup.string().max(20, "Must be 20 characters or less"),
+      email: Yup.string().email("Invalid email address"),
+      role: Yup.string(),
     }),
   });
+
+  const formFields = formik.initialValues;
+  delete formFields.role;
+  delete formFields.userId;
+  const fields = Object.keys(formFields);
 
   return (
     <>
@@ -77,78 +109,26 @@ export default function EditCustomer({ currentUser }) {
         Update User
       </Typography>
       <form className={classes.form} onSubmit={formik.handleSubmit}>
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
-          autoFocus
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.email && formik.errors.email ? (
-          <div>{formik.errors.email}</div>
-        ) : null}
-
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.password && formik.errors.password ? (
-          <div>{formik.errors.password}</div>
-        ) : null}
-
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.password && formik.errors.password ? (
-          <div>{formik.errors.password}</div>
-        ) : null}
-
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.password && formik.errors.password ? (
-          <div>{formik.errors.password}</div>
-        ) : null}
-
+        <List className={classes.list}>
+          <Fields formik={formik} fields={fields}></Fields>
+          <InputLabel className={classes.selectlabel} id="role-label">
+            Roles
+          </InputLabel>{" "}
+          <Select
+            className={classes.select}
+            labelId="role-label"
+            id="role"
+            name="role"
+            value={formik.values.role}
+            onChange={formik.handleChange}
+          >
+            {roles.map((role) => (
+              <MenuItem key={role} value={role}>
+                {role}
+              </MenuItem>
+            ))}
+          </Select>
+        </List>
         <Button
           type="submit"
           fullWidth
@@ -156,10 +136,10 @@ export default function EditCustomer({ currentUser }) {
           color="primary"
           className={classes.submit}
         >
-          {auth.loading ? (
+          {loading ? (
             <CircularProgress color="secondary" size="1.5rem" />
           ) : (
-            "Sign In"
+            "Update"
           )}
         </Button>
       </form>

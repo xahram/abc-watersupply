@@ -4,6 +4,9 @@ import customersService from "../services/customers.service";
 export const GET_ALL_CUSTOMERS_SUCCESS = "GET_ALL_CUSTOMERS_SUCCESS";
 export const GET_ALL_CUSTOMERS_FAILURE = "GET_ALL_CUSTOMERS_FAILURE";
 
+export const UPDATE_CUSTOMER = "UPDATE_CUSTOMER";
+export const UPDATE_CUSTOMER_FAILURE = "UPDATE_CUSTOMER_FAILURE";
+
 export function getAllCustomers() {
   return async (dispatch) => {
     try {
@@ -16,6 +19,25 @@ export function getAllCustomers() {
     } catch (error) {
       dispatch({
         type: GET_ALL_CUSTOMERS_FAILURE,
+        payload: { error: error },
+      });
+      errorNotify(error);
+    }
+  };
+}
+
+export function updateCustomer(values) {
+  return async (dispatch) => {
+    try {
+      const customer = await customersService.updateCustomer(values);
+      dispatch({
+        type: UPDATE_CUSTOMER
+      });
+      console.log("[customerActions.js : Update Customer Line No 37] ", customer);
+      successNotify("User Updated Successfully")
+    } catch (error) {
+      dispatch({
+        type: UPDATE_CUSTOMER_FAILURE,
         payload: { error: error },
       });
       errorNotify(error);

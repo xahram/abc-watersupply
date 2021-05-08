@@ -14,10 +14,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
 }));
+
+
 export default function Dashboard() {
   const classes = useStyles();
 
   React.useEffect(() => {
+
     document.title = "Dashboard";
   }, []);
   return (
