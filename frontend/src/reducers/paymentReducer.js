@@ -5,13 +5,7 @@ import {
 } from "../actions/paymentActions";
 
 const initialState = {
-  totalCustomerPayments: [
-    {
-      paid: 11,
-      dueAmount: 11,
-      paymentTime: "1234 2134 234",
-    }
-  ],
+  totalCustomerPayments: [],
 };
 
 const customerReducer = (state = initialState, action) => {

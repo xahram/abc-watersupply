@@ -74,8 +74,6 @@ export default function Customer() {
     e.preventDefault();
     await dispatch(getAllPaymentsOfUser(id));
     handlePaymentOpen();
-    console.log(payments)
-    console.log("you click",id)
   };
 
   const dtCustomerAllPaymentsRows = payments.totalCustomerPayments.map(

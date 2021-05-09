@@ -77,7 +77,7 @@ const LoginView = (props) => {
     },
     onSubmit: async (values) => {
       await dispatch(login(values.email, values.password));
-      props.history.push("/dashboard");
+      props.history.push("/dashboard/customers");
 
     },
 

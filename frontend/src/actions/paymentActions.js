@@ -1,4 +1,5 @@
 import { errorNotify, successNotify } from "../utils/alerts/alerts";
+import moment from "moment";
 import paymentService from "../services/payment.service";
 
 export const GET_ALL_PAYMENTS_SUCCESS = "GET_ALL_PAYMENTS_SUCCESS";
@@ -10,7 +11,12 @@ export function getAllPaymentsOfUser(id) {
       const { payments } = await paymentService.getAllPaymentsForUser(id);
       dispatch({
         type: GET_ALL_PAYMENTS_SUCCESS,
-        payload: { payments: payments },
+        payload: {
+          payments: payments.map((payment) => ({
+            ...payment,
+            paymentTime: moment(payment.paymentTime).format("DD MM YYYY HH:mm:ss"),
+          })),
+        },
       });
       console.log("[paymentActions.js Line No 15] ", payments);
     } catch (error) {

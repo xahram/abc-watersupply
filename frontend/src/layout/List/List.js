@@ -14,7 +14,7 @@ export default function CustomList({list}) {
           <ListItemIcon>
             {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
           </ListItemIcon>
-          <ListItemText primary={text} />
+          <ListItemText>{text}</ListItemText>
         </ListItem>
       ))}
     </List>

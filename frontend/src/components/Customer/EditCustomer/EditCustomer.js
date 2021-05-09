@@ -56,9 +56,6 @@ const useStyles = makeStyles((theme) => ({
   list: {
     width: "60vw",
   },
-  selectlabel: {
-    marginTop: "1rem",
-  },
   select: {
     width: "100%",
   },

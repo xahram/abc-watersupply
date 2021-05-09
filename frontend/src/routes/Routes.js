@@ -12,7 +12,7 @@ const routesConfig = [
     component: () => <Redirect to="/login" />,
   },
   {
-    exact: true,
+    // exact: true,
     path: "/dashboard",
     guard: AuthGuard,
     layout: MainLayout,

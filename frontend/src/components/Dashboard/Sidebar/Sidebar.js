@@ -3,9 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import Divider from "@material-ui/core/Divider";
 import List from "../../../layout/List/List";
-import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import { SIDEBAR_ITEMS_1, SIDEBAR_ITEMS_2 } from "../../../config/index";
+import { Links } from "../../../layout/Links/Links";
+import { SIDEBAR_ITEMS_2 } from "../../../config/index";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PermanentDrawerLeft() {
   const classes = useStyles();
+  const SIDEBAR_ITEMS_1 = React.useMemo(Links, []);
 
   return (
     <div className={classes.root}>

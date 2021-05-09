@@ -1,7 +1,9 @@
-import React from "react";
+import React, { lazy } from "react";
 import Sidebar from "./Sidebar/Sidebar";
 import { makeStyles } from "@material-ui/core/styles";
-import Customer from "../Customer/Customer";
+// import Customer from "../Customer/Customer";
+import NestedRoutes from "../../routes/NestedRoutes";
+import { useRouteMatch, useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   mainSection: {
@@ -15,19 +17,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function Dashboard() {
   const classes = useStyles();
+  const match = useRouteMatch();
+  const history = useHistory();
+
+  const routesConfig = React.useMemo(
+    () => [
+      {
+        exact: true,
+        path: match.url + "/customers",
+        component: lazy(() => import("../Customer/Customer")),
+      },
+    ],
+    []
+  );
 
   React.useEffect(() => {
-
     document.title = "Dashboard";
   }, []);
   return (
     <div className={classes.root}>
       <Sidebar />
       <section className={classes.mainSection}>
-        <Customer />
+        <NestedRoutes routesConfig={routesConfig} />
+        {/* <Customer /> */}
       </section>
     </div>
   );
