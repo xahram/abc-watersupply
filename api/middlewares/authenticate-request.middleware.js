@@ -16,6 +16,7 @@ const { getUserRolesFromDatabase } = require("../dependencies/config");
 
 const accessGranter = async (req, res, next) => {
   try {
+    console.log(req.headers.authorization)
     const token = req.headers.authorization.replace("Bearer ", "");
 
     // logInfo("authneticate-request file: ", token);

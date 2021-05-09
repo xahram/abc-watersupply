@@ -9,12 +9,18 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (config) => {
+    if (config.url === "auth/login") {
+      return config;
+    }
+
     if (!localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_NAME))
       return Promise.reject("No AUthentication Token FOund");
 
-    instance.defaults.headers.common[
+    config.headers.common[
       "Authorization"
     ] = `Bearer ${localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_NAME)}`;
+    
+    console.log("axios", config.headers.common["Authorization"]);
     return config;
   },
   (error) => {
@@ -30,11 +36,6 @@ instance.interceptors.response.use(
       response.status,
       response.statusText
     );
-
-    
-    instance.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN_NAME)}`;
 
     return response;
   },

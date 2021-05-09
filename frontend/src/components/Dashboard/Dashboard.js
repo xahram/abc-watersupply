@@ -29,6 +29,21 @@ export default function Dashboard() {
         path: match.url + "/customers",
         component: lazy(() => import("../Customer/Customer")),
       },
+      {
+        exact: true,
+        path: match.url + "/deliveries",
+        component: lazy(() => import("../Deliveries/Deliveries")),
+      },
+      {
+        exact: true,
+        path: match.url + "/utilities",
+        component: lazy(() => import("../Utilities/Utilities")),
+      },
+      {
+        exact: true,
+        path: match.url + "/payments",
+        component: lazy(() => import("../Payments/Payments")),
+      },
     ],
     []
   );

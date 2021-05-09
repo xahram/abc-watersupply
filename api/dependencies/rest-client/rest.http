@@ -2,14 +2,14 @@
 ###
 POST http://localhost:7000/auth/signup
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTAxNTg5fQ.xwJSxamocUUc_g-bQ-a2Tv9MYvkCiIaq_Kwp4j8UR-E
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOTc4MWFkZmE3YWZjZDA5NGY0YTU0ZSIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjIwNTQxODY5fQ.YRSqhJ_G7YSNnWsWnEZ0q4T_-67872h27vxUlz2sUxg
 
 {
-    "email":"customer5@gmail.com",
-    "name": "customer5",
-    "age": 29,
+    "email":"customer4@gmail.com",
+    "name": "customer4",
+    "age": 22,
     "role" : "CUSTOMER",
-    "subscriptionId":"608908a78286c30b0447b3d5"
+    "subscriptionId":"6097817ca50cac6725969663"
 }
 
 ###
@@ -24,7 +24,7 @@ Content-Type: application/json
 ###
 GET  http://localhost:7000/auth/allUsers
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTA4NDYxfQ.W7DbtVHlYTO95wnEvsEOnHtol4Gg6SmWDQ0UeDtWaew
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOTc4MWFkZmE3YWZjZDA5NGY0YTU0ZSIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjIwNTQxODY5fQ.YRSqhJ_G7YSNnWsWnEZ0q4T_-67872h27vxUlz2sUxg
 
 
 ###
@@ -48,7 +48,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhN
 ###
 POST http://localhost:7000/admin/utility
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTA4NDYxfQ.W7DbtVHlYTO95wnEvsEOnHtol4Gg6SmWDQ0UeDtWaew
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjIwNTQxMTMyfQ.JiINYD2BjC24bIhSK7v5lOwFIhDnRAMtjA1HfXlsc0U
 
 {
    "roles": ["SUPER_USER","ADMIN","DELIVERY_BOY","CUSTOMER"],
@@ -77,7 +77,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhN
 ###
 GET  http://localhost:7000/admin/utility
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NDk5ODExfQ.rIxt6YHoYms9OnAZuZJOKNvElKzyRgwstw5_-twsGLU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOTc4MWFkZmE3YWZjZDA5NGY0YTU0ZSIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjIwNTQxODY5fQ.YRSqhJ_G7YSNnWsWnEZ0q4T_-67872h27vxUlz2sUxg
 
 
 #   ---------------------------PAYMENT---------------------------------

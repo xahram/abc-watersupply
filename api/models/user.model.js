@@ -23,7 +23,7 @@ const userSchema = mongoose.Schema({
   },
   subscription: {
     type: mongoose.Schema.Types.ObjectId,
-    ref : "Utility"
+    ref : "Utility.subscriptions"
   }
 });
 

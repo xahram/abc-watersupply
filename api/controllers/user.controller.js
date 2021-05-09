@@ -140,7 +140,8 @@ const searchUser = async (req, res, next) => {
 // CONTROLLER FOR GETTING ALL USERS
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find().select("-__v -password");
+    const users = await User.find()
+      .select("-__v -password");
 
     //Check if the Array of Users is empty
     if (!users.length)

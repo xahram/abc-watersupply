@@ -21,7 +21,7 @@ export function getAllCustomers() {
         type: GET_ALL_CUSTOMERS_FAILURE,
         payload: { error: error },
       });
-      errorNotify(error);
+      console.log(error)
     }
   };
 }

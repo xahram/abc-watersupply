@@ -13,7 +13,7 @@ class AuthService {
     } catch (error) {
       // console.log(error.response.data);
       // console.log(error.response.status);
-
+      console.log("aut.service")
       return Promise.reject(error.response.data.message);
     }
   };
