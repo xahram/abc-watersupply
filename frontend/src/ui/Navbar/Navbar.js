@@ -23,13 +23,13 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
     display: "block",
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       display: "none",
     },
   },
   title: {
     display: "none",
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       display: "block",
     },
   },
@@ -188,7 +188,7 @@ export default function PrimarySearchAppBar() {
   return (
     <div className={classes.grow}>
       <Sidedrawer toggleDrawer={toggleDrawer} state={state} anchor="left" />
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             edge="start"

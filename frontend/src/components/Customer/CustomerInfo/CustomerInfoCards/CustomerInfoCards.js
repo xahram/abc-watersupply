@@ -20,7 +20,7 @@ export default function CustomerInfo({ totalCustomers, user }) {
     { name: "Subscription", value: "none" },
   ].map((card,i) => {
     return (
-      <Paper key={i} className={classes.root} elevation={6}>
+      <Paper key={i} className={classes.root}  elevation={12}>
         <Typography className={classes.typography} variant="h3" align="left">
           {card.name}
         </Typography>

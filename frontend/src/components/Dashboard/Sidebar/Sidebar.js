@@ -2,17 +2,19 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Divider from "@material-ui/core/Divider";
-import List from "../../../layout/List/List";
+import List from "../../../ui/List/List";
 import Paper from "@material-ui/core/Paper";
-import { Links } from "../../../layout/Links/Links";
+import { Links } from "../../../ui/Links/Links";
 import { SIDEBAR_ITEMS_2 } from "../../../config/index";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "none",
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       display: "flex",
+      position: "fixed",
+      marginTop:"3rem"
     },
   },
   appBar: {

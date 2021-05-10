@@ -6,7 +6,7 @@ const {
   getPaymentRecordOfUserSchemaValidator,
   singlePaymentRecordValidatorSchema,
   updatePaymentRecordSchemaValidator,
-  calculateTotalPaymentForUserSchemaValidator
+  calculateTotalPaymentForUserSchemaValidator,
 } = require("../dependencies/helpers/validation.schema/payment.validation");
 const {
   CREATED,
@@ -16,7 +16,6 @@ const {
   NOT_FOUND,
 } = require("../dependencies/config").RESPONSE_STATUS_CODES;
 const mongoose = require("mongoose");
-
 
 // CONTROLLER FOR CREATING NEW PAYMENT RECORD
 const createPayment = async (req, res, next) => {
@@ -67,7 +66,6 @@ const createPayment = async (req, res, next) => {
   }
 };
 
-
 // CONTROLLER TO GET ALL THE PAYMENTS OF A GIVEN USER
 const getPayments = async (req, res, next) => {
   try {
@@ -89,7 +87,6 @@ const getPayments = async (req, res, next) => {
   }
 };
 
-
 // GETTING SINGLE PAYMENT RECORD BASED ON PAYMENT ID
 const getSinglePaymentRecord = async (req, res, next) => {
   try {
@@ -108,8 +105,7 @@ const getSinglePaymentRecord = async (req, res, next) => {
   }
 };
 
-
-// CONTROLLER FOR UPDATING A PAYMENT RECORD BASED ON PAYMENTID 
+// CONTROLLER FOR UPDATING A PAYMENT RECORD BASED ON PAYMENTID
 const updatePaymentRecord = async (req, res, next) => {
   try {
     const values = await updatePaymentRecordSchemaValidator.validateAsync(
@@ -133,14 +129,16 @@ const updatePaymentRecord = async (req, res, next) => {
   }
 };
 
-
 // CONTROLLER TO CALCULATE THE TOTAL PAYMENT PRICE OF USER BASED ON ITS ID
 const calculateTotalPaymentForUser = async (req, res, next) => {
   try {
-
     // Validate THe incoming request Schema FOr valid User Id
-    const {userId} = await calculateTotalPaymentForUserSchemaValidator.validateAsync(req.params)
-  
+    const {
+      userId,
+    } = await calculateTotalPaymentForUserSchemaValidator.validateAsync(
+      req.params
+    );
+
     const totalPayments = await Payment.aggregate([
       // Stage 1 :  Match the user based on incoming userId in the Payment Collection
       { $match: { userId: mongoose.Types.ObjectId(userId) } },
@@ -192,6 +190,49 @@ const calculateTotalPaymentForUser = async (req, res, next) => {
   }
 };
 
+const getAllPaymentsRecord = async (req, res, next) => {
+  try {
+    const payments = await Payment.aggregate([
+      { $match: { _id: { $exists: 1 } } },
+      {
+        $project: {
+          user: 1,
+          dueAmount: 1,
+          paid: 1,
+          _id: 1,
+          userId:1,
+          paymentTime: {
+            $dateToString: {
+              date: "$paymentTime",
+              format: "%Y-%m-%d %H:%M:%S",
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+
+      {
+        $unwind: "$user"
+      }
+
+    ]);
+    if (!payments.length)
+      return res
+        .status(NOT_FOUND)
+        .send({ message: "No Payment Record Exists..." });
+    res.status(SUCCESS).send({ payments });
+  } catch (error) {
+    res.status(NOT_FOUND).send({ message: error.message });
+  }
+};
+
 // EXPORT ALL CONTROLLERS
 module.exports = {
   createPayment,
@@ -199,4 +240,5 @@ module.exports = {
   getSinglePaymentRecord,
   updatePaymentRecord,
   calculateTotalPaymentForUser,
+  getAllPaymentsRecord,
 };

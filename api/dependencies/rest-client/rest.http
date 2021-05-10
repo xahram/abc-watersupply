@@ -94,6 +94,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhN
 }
 
 ###
+GET   http://localhost:7000/payments/getAllPaymentsRecord
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOTc4MWFkZmE3YWZjZDA5NGY0YTU0ZSIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjIwNjIzODA4fQ.Wv9XRHVZXxGWGBmN2racNwZCW8r3OmiAxjAhjmXwx00
+
+
+###
 POST http://localhost:7000/payments/getPayments
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhNjE2OGY1MTIwNDRlOTQxMCIsImVtYWlsIjoic3VwZXJ1c2VyQGdtYWlsLmNvbSIsInJvbGUiOiJTVVBFUl9VU0VSIiwiaWF0IjoxNjE5NTA4NDYxfQ.W7DbtVHlYTO95wnEvsEOnHtol4Gg6SmWDQ0UeDtWaew
@@ -158,6 +164,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwODc5OTNhN
 {
     "userId":"608e589d1c164145787854ae"
 }
+
 
 
 ###

@@ -14,6 +14,20 @@ class PaymentService {
       return Promise.reject(error.response.data.message);
     }
   };
+
+
+  getAllPaymentsRecord = async () => {
+    try {
+      const response = await axios.get("payments/getAllPaymentsRecord");
+
+      if (response.status === 200 || response.status === 201)
+        return Promise.resolve(response.data);
+
+      return Promise.reject(response.data);
+    } catch (error) {
+      return Promise.reject(error.response.data.message);
+    }
+  };
 }
 
 const paymentService = new PaymentService();

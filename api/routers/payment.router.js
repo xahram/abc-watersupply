@@ -4,7 +4,8 @@ const {
   getPayments,
   getSinglePaymentRecord,
   updatePaymentRecord,
-  calculateTotalPaymentForUser
+  calculateTotalPaymentForUser,
+  getAllPaymentsRecord
 } = require("../controllers/payment.controller");
 const {
   accessGranter,
@@ -50,6 +51,12 @@ paymentRouter.get(
   accessGranter,
   grantUserAccessToRole,
   calculateTotalPaymentForUser
+);
+paymentRouter.get(
+  "/getAllPaymentsRecord",
+  accessGranter,
+  grantUserAccessToRole,
+  getAllPaymentsRecord
 );
 
 

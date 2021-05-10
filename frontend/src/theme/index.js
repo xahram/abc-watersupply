@@ -55,11 +55,13 @@ const themeConfigs = [
         main: "#7f5eff",
       },
       secondary: {
-        main: "#1ae4ff",
+        main: "#f38f19",
       },
       text: {
-        primary: colors.blueGrey[900],
-        secondary: colors.blueGrey[600],
+        primary: "#939393",
+        secondary:"#2196f3",
+        // primary: colors.blueGrey[900],
+        // secondary: colors.blueGrey[600],
       },
     },
     shadows: softShadows,

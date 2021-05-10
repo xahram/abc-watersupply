@@ -83,32 +83,35 @@ export default function Customer() {
       paymentTime: payment.paymentTime,
     })
   );
-  const dtAllCUstomersListRows = customers.customers.map((user) => ({
-    name: (
-      <Link
-        href="#"
-        onClick={(e) => handleGetAllPayments(e, user._id)}
-        variant="h4"
-      >
-        {user.name}
-      </Link>
-    ),
-    email: user.email,
-    role: user.role,
-    age: user.age,
-    subscription: user.subscription ? user.subscription : "none",
-    edit: (
-      <IconButton
-        edge="start"
-        color="inherit"
-        onClick={() => {
-          handleOpen(user);
-        }}
-      >
-        <EditIcon />
-      </IconButton>
-    ),
-  }));
+  const dtAllCUstomersListRows = React.useMemo(() => {
+    return customers.customers.map((user) => ({
+      name: (
+        <Link
+          href="#"
+          onClick={(e) => handleGetAllPayments(e, user._id)}
+          variant="h4"
+        >
+          {user.name}
+        </Link>
+      ),
+      email: user.email,
+      role: user.role,
+      age: user.age,
+      subscription: user.subscription ? user.subscription : "none",
+      edit: (
+        <IconButton
+          edge="start"
+          color="inherit"
+          onClick={() => {
+            handleOpen(user);
+          }}
+        >
+          <EditIcon />
+        </IconButton>
+      ),
+    }));
+  }, [customers.customers]);
+  
   React.useEffect(() => {
     dispatch(getAllCustomers());
     dispatch(getAllUtilities());
@@ -125,7 +128,11 @@ export default function Customer() {
         rows={dtAllCUstomersListRows}
         loading={false}
       />
-      <Modal open={paymentOpen} handleOpen={handlePaymentOpen} handleClose={handlePaymentClose}>
+      <Modal
+        open={paymentOpen}
+        handleOpen={handlePaymentOpen}
+        handleClose={handlePaymentClose}
+      >
         <DataTable
           columns={dtAllCustomerPaymentsColumns}
           rows={dtCustomerAllPaymentsRows}

@@ -1,10 +1,12 @@
 const typography = {
   fontFamily: [
-    "BasierCircle",
+    "Fira Mono",
+    "sans-serif",
     "Roboto",
     "Helvetica",
+    "Verdana",
+    "BasierCircle",
     "Arial",
-    "sans-serif",
   ].join(","),
 
   h1: {
@@ -13,8 +15,8 @@ const typography = {
     letterSpacing: "-0.24px",
   },
   h2: {
-    fontWeight: 500,
-    fontSize: 29,
+    fontWeight: 400, //500
+    fontSize: 28,   // 29
     letterSpacing: "-0.24px",
   },
   h3: {
@@ -24,7 +26,7 @@ const typography = {
   },
   h4: {
     fontWeight: 500,
-    fontSize: 20,
+    fontSize: 16,  // 20
     letterSpacing: "-0.06px",
   },
   h5: {

@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       display: "grid",
       gridTemplateColumns: "1fr 1fr 1fr 1fr",
-      columnGap: "2rem",
+      columnGap: "0.5rem",
     },
   },
 
