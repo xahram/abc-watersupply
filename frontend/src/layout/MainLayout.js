@@ -5,7 +5,7 @@ import Sidebar from "../components/Dashboard/Sidebar/Sidebar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: "#fbfbfb",
+    backgroundColor: theme.palette.background.paper,
   },
 }));
 

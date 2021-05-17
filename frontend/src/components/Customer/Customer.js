@@ -97,7 +97,7 @@ export default function Customer() {
       email: user.email,
       role: user.role,
       age: user.age,
-      subscription: user.subscription ? user.subscription : "none",
+      subscription: user.subscription ? user.subscription.name : "none",
       edit: (
         <IconButton
           edge="start"

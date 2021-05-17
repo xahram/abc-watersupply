@@ -15,6 +15,10 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import Sidedrawer from "../Sidedrawer/Sidedrawer";
+import { THEMES } from "../../constants/index";
+import useSettings from "../../hooks/useSettings";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
+import WbIncandescentIcon from "@material-ui/icons/WbIncandescent";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -84,8 +88,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const darkModeSettings = {
+  direction: "ltr",
+  responsiveFontSizes: true,
+  theme: THEMES.ONE_DARK,
+};
+const defaultSettings = {
+  direction: "ltr",
+  responsiveFontSizes: true,
+  theme: THEMES.LIGHT,
+};
+
 export default function PrimarySearchAppBar() {
   const classes = useStyles();
+
+  // Dark Mode State Handling
+  const { saveSettings } = useSettings();
+  const [darkMode, setDarkMode] = React.useState(false);
+  React.useEffect(() => {
+    darkMode ? saveSettings(darkModeSettings) : saveSettings(defaultSettings);
+  }, [darkMode]);
+
+  const handleThemeChange = () => {
+    setDarkMode(!darkMode);
+  };
 
   const [state, setState] = React.useState({
     top: false,
@@ -155,13 +181,13 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem onClick={handleThemeChange}>
         <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
+          <Badge color="secondary">
+            {darkMode ? <WbIncandescentIcon /> : <Brightness4Icon />}
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p>Toggle Theme</p>
       </MenuItem>
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
@@ -188,7 +214,8 @@ export default function PrimarySearchAppBar() {
   return (
     <div className={classes.grow}>
       <Sidedrawer toggleDrawer={toggleDrawer} state={state} anchor="left" />
-      <AppBar position="fixed">
+      <AppBar color={darkMode ? "secondary" : "primary"} position="fixed">
+        
         <Toolbar>
           <IconButton
             edge="start"
@@ -217,12 +244,16 @@ export default function PrimarySearchAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            <IconButton
+              onClick={handleThemeChange}
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
               <Badge
                 // badgeContent={4}
                 color="secondary"
               >
-                <MailIcon />
+                {darkMode ? <WbIncandescentIcon /> : <Brightness4Icon />}
               </Badge>
             </IconButton>
             <IconButton aria-label="show 17 new notifications" color="inherit">

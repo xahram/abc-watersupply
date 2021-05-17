@@ -1,10 +1,10 @@
 const typography = {
   fontFamily: [
     "Fira Mono",
-    "sans-serif",
+    "Verdana",
     "Roboto",
     "Helvetica",
-    "Verdana",
+    "sans-serif",
     "BasierCircle",
     "Arial",
   ].join(","),

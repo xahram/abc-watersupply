@@ -112,7 +112,7 @@ const login = async (req, res, next) => {
       name: user.name,
       email: user.email,
       age: user.age,
-      role:user.role,
+      role: user.role,
       token,
     });
   } catch (error) {
@@ -141,9 +141,61 @@ const searchUser = async (req, res, next) => {
 // CONTROLLER FOR GETTING ALL USERS
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find()
-      .select("-__v -password");
+    // const users = await User.find()
+    //   .select("-__v -password");
+    const users = await User.aggregate([
+      { $match: { _id: { $exists: 1 } } },
+      {
+        $lookup: {
+          from: "utilities",
+          let: { subscription_id: "$subscription" },
+          pipeline: [
+            { $unwind: "$subscriptions" },
+            {
+              $match: {
+                $expr: {
+                  $or: [
+                    { $eq: ["$subscriptions._id", "$$subscription_id"] },
+                    // { $not: { $exists: "$$subscription_id" } },
+                    // { "$subscription._id"},
+                  ],
+                },
+              },
+            },
+            { $replaceRoot: { newRoot: "$subscriptions" } },
+          ],
+          as: "subscription",
+        },
+      },
+      { $unwind: "$subscription" },
+      {
+        $project: {
+          subscription: 1,
+          _id: 1,
+          name: 1,
+          age: 1,
+          role: 1,
+          email: 1,
+        },
+      },
+    ]);
 
+    // { $unwind: "$subscriptions" },
+    // {
+    //   $match: {
+    //     $expr: { $eq: ["$$subscription_id", "$subscriptions._id"] },
+    //   },
+    // },
+    // { $group: { _id: "$subscriptions._id" } },
+
+    // {
+    //   $lookup: {
+    //     from: "users",
+    //     localField: "subscriptions",
+    //     foreignField: "subscription",
+    //     as: "sub",
+    //   },
+    // },
     //Check if the Array of Users is empty
     if (!users.length)
       return res.status(NOT_FOUND).send({ message: "No User Exists" });

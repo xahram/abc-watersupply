@@ -24,7 +24,7 @@ saleRouter.post(
 );
 
 //Route For getting all the sales that have happened So far
-saleRouter.post("/getSales", accessGranter, grantUserAccessToRole, getSales);
+saleRouter.get("/getSales", accessGranter, grantUserAccessToRole, getSales);
 
 //Route for getting A single sale by record
 saleRouter.get(

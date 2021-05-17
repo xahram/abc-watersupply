@@ -21,10 +21,11 @@ export default function Field({ field, formik }) {
     setToggle(!toggle);
   };
   const onEditHandler = (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     setToggle(!toggle);
   };
-  return toggle ? (
+
+  let component = toggle ? (
     <>
       <ListItem>
         <TextField
@@ -33,6 +34,7 @@ export default function Field({ field, formik }) {
           id={field}
           label={field}
           fullWidth
+          onBlur={formik.handleBlur}
           onChange={formik.handleChange}
         />
         <ListItemSecondaryAction>
@@ -57,6 +59,14 @@ export default function Field({ field, formik }) {
         </ListItemSecondaryAction>
       </ListItem>
       <Divider />
+    </>
+  );
+  return (
+    <>
+      {component}
+      {formik.touched[field] && formik.errors[field] ? (
+        <div>{formik.errors[field]}</div>
+      ) : null}
     </>
   );
 }

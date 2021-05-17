@@ -48,13 +48,26 @@ const createSale = async (req, res, next) => {
 // GET ALL SALES RECORD CONTROLLER
 const getSales = async (req, res, next) => {
   try {
-    const sales = await Sale.find(
-      {},
-      { __v: 0 },
-      { sort: { paymentTime: -1 } }
-    );
+    const sales = await Sale.aggregate([
+      { $match: { _id: { $exists: 1 } } },
+      {
+        $project: {
+          dueAmount: 1,
+          paid: 1,
+          _id: 1,
+          paymentTime: {
+            $dateToString: {
+              date: "$paymentTime",
+              format: "%Y-%m-%d %H:%M:%S",
+            },
+          },
+        },
+      },
+      { $sort: { paymentTime: -1 } },
+    ]);
 
-    // In casae sales array is empty
+
+    // In case sales array is empty
     if (!sales.length)
       return res
         .status(NOT_FOUND)
