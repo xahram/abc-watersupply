@@ -36,3 +36,11 @@ https://stackoverflow.com/questions/39084924/componentwillunmount-not-being-call
 
 ----------- React Router catch all route ----------
 https://stackoverflow.com/questions/51457480/react-router-4-catch-all-route
+
+--------- REACT ROUTER HISTORY LOCATION --------------
+https://stackoverflow.com/questions/53237729/what-is-the-key-which-changes-on-every-route-change-with-connected-react-route
+
+
+------------ React Router Style ---------------
+https://stackoverflow.com/questions/37669391/how-to-get-rid-of-underline-for-link-component-of-react-router
+https://github.com/mui-org/material-ui/issues/1534

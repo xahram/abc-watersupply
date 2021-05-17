@@ -9,7 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import { Typography } from "@material-ui/core";
-import Skeleton from "react-loading-skeleton";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const useStyles = makeStyles({
   root: {
@@ -24,7 +24,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function StickyHeadTable({ columns, rows, loading }) {
+export default function StickyHeadTable({
+  columns,
+  rows,
+  loading,
+  skeletonCount,
+}) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -39,54 +44,59 @@ export default function StickyHeadTable({ columns, rows, loading }) {
   };
 
   const table = loading ? (
-    <Skeleton count={10} />
+    <>
+      {Array(skeletonCount).fill(skeletonCount).map(() => {
+        return <Skeleton variant="text" />;
+      })}
+    </>
   ) : (
+    <Table
+      //   size="small"
+      //   aria-label="a dense table"
+      stickyHeader
+      aria-label="sticky table"
+    >
+      <TableHead>
+        <TableRow>
+          {columns.map((column) => (
+            <TableCell
+              key={column.id}
+              align={column.align}
+              style={{ minWidth: column.minWidth }}
+            >
+              {column.label}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {rows
+          .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+          .map((row) => {
+            return (
+              <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                {columns.map((column) => {
+                  const value = row[column.id];
+                  return (
+                    <TableCell key={column.id} align={column.align}>
+                      {column.format && typeof value === "number"
+                        ? column.format(value)
+                        : value}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            );
+          })}
+      </TableBody>
+    </Table>
+  );
+  return (
     <Paper elevation={12} className={classes.root}>
       <Typography align="left" variant="h2" color="primary">
         Users
       </Typography>
-      <TableContainer className={classes.container}>
-        <Table
-          //   size="small"
-          //   aria-label="a dense table"
-          stickyHeader
-          aria-label="sticky table"
-        >
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === "number"
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <TableContainer className={classes.container}>{table}</TableContainer>
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
@@ -98,7 +108,6 @@ export default function StickyHeadTable({ columns, rows, loading }) {
       />
     </Paper>
   );
-  return table;
 }
 
 export function DenseTable({ columns, rows, pagination }) {
@@ -117,7 +126,7 @@ export function DenseTable({ columns, rows, pagination }) {
 
   const rowsBasedOnPagination = pagination
     ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    : rows
+    : rows;
 
   return (
     <>

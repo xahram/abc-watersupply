@@ -10,6 +10,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import Link from "@material-ui/core/Link";
 import IconButton from "@material-ui/core/IconButton";
 import { getAllPaymentsOfUser } from "../../actions/paymentActions";
+import { motion } from "framer-motion";
 
 const dtAllCustomerPaymentsColumns = [
   { id: "paid", label: "Amount Paid", minWidth: 100 },
@@ -50,7 +51,9 @@ const dtAllCUstomersListColumns = [
 export default function Customer() {
   const [open, setOpen] = React.useState(false);
   const [paymentOpen, setPaymentOpen] = React.useState(false);
+  const [dtLoading, setDTLoading] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState(null);
+
   const dispatch = useDispatch();
   const { customers, auth, payments } = useSelector((state) => state);
 
@@ -111,22 +114,46 @@ export default function Customer() {
       ),
     }));
   }, [customers.customers]);
-  
+
   React.useEffect(() => {
-    dispatch(getAllCustomers());
-    dispatch(getAllUtilities());
+    const getAllUtilitiesAndCustomers = async () => {
+      await dispatch(getAllCustomers());
+      await dispatch(getAllUtilities());
+      setDTLoading(false);
+    };
+    getAllUtilitiesAndCustomers()
   }, []);
 
+  const transition = { duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] };
+  const pageVariants = {
+    initial: {
+      opacity: 0,
+    },
+    in: {
+      opacity: 1,
+      transition,
+    },
+    out: {
+      opacity: 0,
+    },
+  };
+
   return (
-    <>
+    <motion.div
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+    >
       <Modal open={open} handleOpen={handleOpen} handleClose={handleClose}>
         <EditCustomer handleClose={handleClose} currentUser={currentUser} />
       </Modal>
       <UserInfo totalCustomers={customers.totalCustomers} user={auth.user} />
       <DataTable
+        skeletonCount={10}
         columns={dtAllCUstomersListColumns}
         rows={dtAllCUstomersListRows}
-        loading={false}
+        loading={dtLoading}
       />
       <Modal
         open={paymentOpen}
@@ -138,6 +165,6 @@ export default function Customer() {
           rows={dtCustomerAllPaymentsRows}
         />
       </Modal>
-    </>
+    </motion.div>
   );
 }

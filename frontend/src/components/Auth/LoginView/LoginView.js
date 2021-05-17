@@ -78,7 +78,6 @@ const LoginView = (props) => {
     onSubmit: async (values) => {
       await dispatch(login(values.email, values.password));
       props.history.push("/dashboard/customers");
-
     },
 
     validationSchema: Yup.object({
@@ -147,6 +146,7 @@ const LoginView = (props) => {
               fullWidth
               variant="contained"
               color="primary"
+              disabled={Object.entries(formik.errors).length ? true : false}
               className={classes.submit}
             >
               {auth.loading ? (
