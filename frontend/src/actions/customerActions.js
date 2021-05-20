@@ -4,6 +4,9 @@ import customersService from "../services/customers.service";
 export const GET_ALL_CUSTOMERS_SUCCESS = "GET_ALL_CUSTOMERS_SUCCESS";
 export const GET_ALL_CUSTOMERS_FAILURE = "GET_ALL_CUSTOMERS_FAILURE";
 
+export const CREATE_CUSTOMER = "CREATE_CUSTOMER";
+export const CREATE_CUSTOMER_FAILURE = "CREATE_CUSTOMER_FAILURE";
+
 export const UPDATE_CUSTOMER = "UPDATE_CUSTOMER";
 export const UPDATE_CUSTOMER_FAILURE = "UPDATE_CUSTOMER_FAILURE";
 
@@ -21,7 +24,7 @@ export function getAllCustomers() {
         type: GET_ALL_CUSTOMERS_FAILURE,
         payload: { error: error },
       });
-      console.log(error)
+      console.log(error);
     }
   };
 }
@@ -31,16 +34,44 @@ export function updateCustomer(values) {
     try {
       const customer = await customersService.updateCustomer(values);
       dispatch({
-        type: UPDATE_CUSTOMER
+        type: UPDATE_CUSTOMER,
       });
-      console.log("[customerActions.js : Update Customer Line No 37] ", customer);
-      successNotify("User Updated Successfully")
+      console.log(
+        "[customerActions.js : Update Customer Line No 37] ",
+        customer
+      );
+      successNotify("User Updated Successfully");
     } catch (error) {
       dispatch({
         type: UPDATE_CUSTOMER_FAILURE,
         payload: { error: error },
       });
       errorNotify(error);
+    }
+  };
+}
+
+export function createCustomer(values) {
+  return async (dispatch) => {
+    try {
+      const customer = await customersService.createCustomer(values);
+      dispatch({
+        type: CREATE_CUSTOMER,
+        payload: {
+          customer,
+        },
+      });
+      console.log(
+        "[customerActions.js : create Customer Line No 37] ",
+        customer
+      );
+      successNotify("User Created Successfully");
+    } catch (error) {
+      dispatch({
+        type: CREATE_CUSTOMER_FAILURE,
+        payload: { error: error },
+      });
+      errorNotify(error.message);
     }
   };
 }

@@ -11,6 +11,7 @@ import Link from "@material-ui/core/Link";
 import IconButton from "@material-ui/core/IconButton";
 import { getAllPaymentsOfUser } from "../../actions/paymentActions";
 import { motion } from "framer-motion";
+import AddCustomer from "./AddCustomer/AddCustomer";
 
 const dtAllCustomerPaymentsColumns = [
   { id: "paid", label: "Amount Paid", minWidth: 100 },
@@ -121,7 +122,7 @@ export default function Customer() {
       await dispatch(getAllUtilities());
       setDTLoading(false);
     };
-    getAllUtilitiesAndCustomers()
+    getAllUtilitiesAndCustomers();
   }, []);
 
   const transition = { duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] };
@@ -148,6 +149,8 @@ export default function Customer() {
       <Modal open={open} handleOpen={handleOpen} handleClose={handleClose}>
         <EditCustomer handleClose={handleClose} currentUser={currentUser} />
       </Modal>
+
+      <AddCustomer />
       <UserInfo totalCustomers={customers.totalCustomers} user={auth.user} />
       <DataTable
         skeletonCount={10}

@@ -28,6 +28,21 @@ class CustomersService {
       return Promise.reject(error.response.data.message);
     }
   };
+
+  createCustomer = async (customer) => {
+    try {
+      console.log("[createCustomer line 34 ] ",customer)
+      const response = await axios.post("auth/signup",customer);
+
+      console.log("[customers.service.js line 22] ", response);
+      if (response.status === 200 || response.status === 201)
+        return Promise.resolve(response.data);
+
+      return Promise.reject(response.data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 }
 
 const customersService = new CustomersService();

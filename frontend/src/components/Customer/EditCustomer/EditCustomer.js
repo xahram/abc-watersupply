@@ -131,6 +131,7 @@ export default function EditCustomer({ currentUser, handleClose }) {
           fullWidth
           variant="contained"
           color="primary"
+          disabled={Object.entries(formik.errors).length ? true : false}
           className={classes.submit}
         >
           {loading ? (

@@ -15,12 +15,20 @@ export const successNotify = (message) => {
 };
 
 export const errorNotify = (message) => {
+  if (!message)
+    return toast.error("Something went wrong...", {
+      style: {
+        border: "1px solid #FF6347",
+        padding: "16px",
+        color: "#FF6347",
+      },
+    });
+
   toast.error(message, {
     style: {
       border: "1px solid #FF6347",
       padding: "16px",
       color: "#FF6347",
     },
-
   });
 };
